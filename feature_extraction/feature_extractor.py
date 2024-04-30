@@ -1,4 +1,6 @@
 from .extractors.edge_detector import edge_detector
+from .extractors.extractor_1 import extractor_1
+from .extractors.extractor_2 import extractor_2
 
 
 '''
@@ -22,7 +24,11 @@ class feature_extractor:
     # Class variables for storing photo url, feature_extractors
     # and all extractors in a list for future use.
     photo_url = None
+
     edge_detector = None
+    extractor_1 = None
+    extractor_2 = None
+
     list_of_extractors = []
 
 
@@ -33,9 +39,13 @@ class feature_extractor:
 
         # TODO: Add more features
         self.edge_detector = edge_detector(photo_url)
+        self.extractor_1 = extractor_1(photo_url)
+        self.extractor_2 = extractor_2
 
         # TODO: For every feature added to list of feature extractors
         self.list_of_feature_extractors.append(self.edge_detector)
+        self.list_of_feature_extractors.append(self.extractor_1)
+        self.list_of_feature_extractors.append(self.extractor_2)
 
 
     '''

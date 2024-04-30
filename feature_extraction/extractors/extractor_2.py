@@ -1,11 +1,11 @@
 '''
-Class representing an edge detector.
+Class representing an Extractor 2.
 
 Attributes:
     - photo_url (Str): URL of current photo
 '''
-class edge_detector:
-    name = "Edge Detector"
+class extractor_2:
+    name = "Extractor 2"
     photo_url = None
 
     def __init__(self, photo_url=""):
