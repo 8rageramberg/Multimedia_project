@@ -40,7 +40,7 @@ class feature_extractor:
         # TODO: Add more features
         self.edge_detector = edge_detector(photo_url)
         self.extractor_1 = extractor_1(photo_url)
-        self.extractor_2 = extractor_2
+        self.extractor_2 = extractor_2(photo_url)
 
         # TODO: For every feature added to list of feature extractors
         self.list_of_feature_extractors.append(self.edge_detector)
