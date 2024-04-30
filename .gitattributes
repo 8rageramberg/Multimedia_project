@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# No .DS_Store files when pushing
+.DS_Store
