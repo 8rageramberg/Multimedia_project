@@ -46,7 +46,7 @@ class feature_extractor:
     '''
     def extract(self):
         # Extract features and return
-        features = [(extractor.name, extractor.get_features()) for extractor in self.list_of_feature_extractors]
+        features = [(extractor.get_name(), extractor.get_features()) for extractor in self.list_of_feature_extractors]
         return features
 
 

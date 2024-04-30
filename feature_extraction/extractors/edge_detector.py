@@ -5,6 +5,7 @@ Attributes:
     - photo_url (Str): URL of current photo
 '''
 class edge_detector:
+    name = "Edge Detector"
     photo_url = None
 
     def __init__(self, photo_url=""):
@@ -18,3 +19,7 @@ class edge_detector:
         # For example: with open(self.photo_url): *some math*
 
         return None
+    
+    '''Getter function for getting photo url'''
+    def get_name(self):
+        return self.name
