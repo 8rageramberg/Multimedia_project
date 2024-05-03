@@ -1,32 +1,48 @@
 from sklearn.decomposition import PCA # type: ignore
+import numpy as np
+import cv2 as cv
 
-'''
-Class representing a SIFT (Scale invariant feature transform)
-descriptor detector which automatically detects the 20 most
-representative descriptors via PCA (Principal component analysis)
-and returns the as a list of vectors.
 
-Attributes:
-    - photo_path (Str): path of current photo
-'''
 class sift_desc_detector:
+    '''
+    Class representing a SIFT (Scale invariant feature transform)
+    descriptor detector which automatically detects the 20 most
+    representative descriptors via PCA (Principal component analysis)
+    and returns the as a list of vectors.
+
+    Attributes:
+        - photo_path (Str): path of current photo
+    '''
+
     name = "SIFT descriptor detector"
     photo_path = None
 
     def __init__(self, photo_path=""):
         self.photo_path = photo_path
         
-    '''
-    Main func:
-    '''
-    def get_features(self):
-
         
+
+    def get_features(self):
+        '''
+        This get_features function retrieves low dimensional
+        sift descriptors of the current image:
+
+        Parameters:
+        - self (sift_desc_detector obj): Itself
+
+        Returns
+        - descriptors (list[descriptors]): List of descriptors of curr img
+        '''
+        # Retrieve the current photo and 
+        curr_photo = cv.imread(self.photo_path)
+
+
 
         return None
     
-    '''Getter function for getting extractor name'''
+
     def get_name(self):
+        '''Getter function for getting extractor name'''
         return self.name
     
 
