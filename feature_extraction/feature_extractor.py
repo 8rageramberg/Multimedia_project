@@ -39,7 +39,7 @@ class feature_extractor:
 
         # TODO: Add more features
         self.edge_detector = edge_detector(photo_path)
-        self.extractor_1 = extractor_1(photo_path)
+        self.extractor_1 = sift_desc_detector(photo_path)
         self.extractor_2 = extractor_2(photo_path)
 
         # TODO: For every feature added to list of feature extractors
