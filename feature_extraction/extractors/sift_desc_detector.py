@@ -1,4 +1,4 @@
-from sklearn.decomposition import PCA # type: ignore
+from sklearn.decomposition import PCA
 import numpy as np
 import cv2 as cv
 
@@ -33,12 +33,27 @@ class sift_desc_detector:
         Returns
         - descriptors (list[descriptors]): List of descriptors of curr img
         '''
-        # Retrieve the current photo and 
+        # Retrieve the current photo and turn it to greyscale
+        # to minimize color space dimensionality and effectivize
+        # processing
         curr_photo = cv.imread(self.photo_path)
+        gray_curr_photo = cv.cvtColor(curr_photo, cv.COLOR_BGR2GRAY)
 
+        # Initialize sift object and utilize on the greyscale
+        # of our image to retrieve descriptors:
+        sift = cv.SIFT.create()
 
+        # TODO: FIX MASK MED BRAGE ALGO!!! 
+        key_points, descriptors = sift.detectAndCompute(gray_curr_photo, None)
+        
 
-        return None
+        # Display the image in a window
+        #img=cv.drawKeypoints(gray_curr_photo, key_points, curr_photo)
+        #cv.imshow('Image', img)
+        #cv.waitKey(0)
+        #cv.destroyAllWindows()
+
+        return descriptors
     
 
     def get_name(self):
