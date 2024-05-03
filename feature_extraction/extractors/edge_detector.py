@@ -26,12 +26,7 @@ class edge_detector:
         }
         # Save the edges as an image
         print("Shape of edges array:", edges.shape)
-        
-        # Save the edges as an image with a file extension
-        cv2.imwrite("archive/posetests/poseedges.jpg", edges)
-        print("Edges saved as image")
-
-        return edges
+        return features
          
     '''Getter function for getting extractor name'''
     def get_name(self):
@@ -65,7 +60,7 @@ class edge_detector:
         return edges
 
 # Uncomment to see canny edge detection
-test_1 = 'archive/A_test_set/Test_plank/plank_g3_copy.jpg'
-detector = edge_detector(test_1)
-features = detector.get_features()
+# test_1 = 'archive/A_test_set/Test_plank/plank_g3_copy.jpg'
+# detector = edge_detector(test_1)
+# features = detector.get_features()
   
