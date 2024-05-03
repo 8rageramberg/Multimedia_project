@@ -31,7 +31,7 @@ Attributes:
     - photo_path (Str): path of current photo
 '''
 class pose_estimation:
-    name = "Extractor 2"
+    name = "pose_estimation"
     photo_path = None
 
     def __init__(self, photo_path=""):
@@ -107,6 +107,6 @@ class pose_estimation:
         return bgr_image
     
 
-test_1 = '/Users/brageramberg/Desktop/Multimedia_Project/archive/hip thrust/hip thrust_100081.jpg'
-shit = pose_estimation(test_1)
-shit.get_features(display=True)
+# test_1 = 'archive/hip thrust/hip thrust_100081.jpg'
+# test = pose_estimation(test_1)
+# test.get_features(display=True)

@@ -24,9 +24,15 @@ class edge_detector:
             'edge_hist': cv2.calcHist([edges], [0], None, [256], [0, 256]),
             'edge_density': np.sum(edges) / (edges.shape[0] * edges.shape[1])
         }
+        # Save the edges as an image
+        print("Shape of edges array:", edges.shape)
+        
+        # Save the edges as an image with a file extension
+        cv2.imwrite("archive/posetests/poseedges.jpg", edges)
+        print("Edges saved as image")
 
-        return features
-    
+        return edges
+         
     '''Getter function for getting extractor name'''
     def get_name(self):
         return self.name
@@ -48,7 +54,7 @@ class edge_detector:
             cv2.waitKey(0)  # Press a key to remove the window
             cv2.destroyAllWindows()
 
-            cv2.imshow('resized', image_scaled)
+            cv2.imshow('resized', image_scaled) 
             cv2.waitKey(0)  # Press a key to remove the window
             cv2.destroyAllWindows()
 
@@ -59,6 +65,7 @@ class edge_detector:
         return edges
 
 # Uncomment to see canny edge detection
-#test_1 = 'archive/A_test_set/Test_plank/plank_g3_copy.jpg'
-#detector = edge_detector(test_1)
-#features = detector.get_features()
+test_1 = 'archive/A_test_set/Test_plank/plank_g3_copy.jpg'
+detector = edge_detector(test_1)
+features = detector.get_features()
+  
