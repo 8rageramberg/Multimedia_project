@@ -1,5 +1,5 @@
 from .extractors.edge_detector import edge_detector
-from .extractors.extractor_1 import extractor_1
+from .extractors.sift_desc_detector import sift_desc_detector
 from .extractors.extractor_2 import extractor_2
 
 
