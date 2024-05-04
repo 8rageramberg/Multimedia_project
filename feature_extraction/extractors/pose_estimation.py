@@ -19,8 +19,6 @@ from mediapipe.tasks.python import vision
 # limitations under the License.
 
 # pip install mediapipe==0.10.9
-
-
 #wget -O pose_landmarker.task -q https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 # MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 
@@ -32,7 +30,7 @@ Attributes:
 '''
 class pose_estimation:
     name = "pose_estimation"
-    photo_path = None
+    photo_path = None 
 
     def __init__(self, photo_path=""):
         self.photo_path = photo_path
@@ -78,7 +76,7 @@ class pose_estimation:
 
         segmentation_mask = detection_result.segmentation_masks[0].numpy_view()
         visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2) * 255
-        return None
+        return visualized_mask, segmentation_mask
     
     '''Getter function for getting extractor name'''
     def get_name(self):
@@ -105,8 +103,3 @@ class pose_estimation:
             solutions.pose.POSE_CONNECTIONS,
             solutions.drawing_styles.get_default_pose_landmarks_style())
         return bgr_image
-    
-
-# test_1 = 'archive/hip thrust/hip thrust_100081.jpg'
-# test = pose_estimation(test_1)
-# test.get_features(display=True)
