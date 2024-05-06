@@ -1,9 +1,14 @@
+import os
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from scipy.spatial.distance import euclidean
 import sys
 sys.path.append("feature_extraction")
-from feature_extraction.extractors.pose_estimator import pose_estimator
+from extractors.pose_estimator import pose_estimator 
+import cv2
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf")
 
 def normalize_landmarks(landmarks):
     # Extract x, y, z, and visibility values from the landmarks
@@ -30,31 +35,85 @@ def calculate_distance(feature_vector1, feature_vector2):
     return euclidean(feature_vector1, feature_vector2)
 
 
-test_1 = 'archive/A_test_set/Test_plank/plank_704601_copy.jpg'
-test_2 = 'archive/A_test_set/Test_plank/plank_g8_copy.jpg'
-test_3 = 'archive/shoulder_press/shoulder_press_100121.jpg' 
+# Define the path to the archive folder
+archive_path = 'archive/'
 
-pose_estimator = pose_estimator(test_1)
-annotated_image_1, landmarks_1, keypoints_1 = pose_estimator.get_features(display=True)
+# PHOTO TO TEST: 
+test_1 = 'archive/deadlift/deadlift_100031.jpg'
+test_1 = 'archive/lat_pulldown/lat_pulldown_g9.jpg'
+      
 
-pose_estimator_2 = pose_estimator(test_2)
-annotated_image_2, landmarks_2, keypoints_2 = pose_estimator_2.get_features(display=True)
-
-pose_estimator_3 = pose_estimator(test_3)
-annotated_image_3, landmarks_3, keypoints_3 = pose_estimator_3.get_features(display=True)
-
-# Create feature vectors for each set of landmarks
+pose_estimator_1 = pose_estimator()
+tiss, tass, keypoints_1 = pose_estimator_1.get_features(test_1)
+if tiss is None:
+    counter = 100000
 feature_vector1 = create_feature_vector(keypoints_1)
-feature_vector2 = create_feature_vector(keypoints_2)
-feature_vector3 = create_feature_vector(keypoints_3)
-
-# Compare normalized feature vectors
-distance = calculate_distance(feature_vector1, feature_vector2)
-print("Distance between feature vectors 1 and 2 :", distance)
 
 
-distance = calculate_distance(feature_vector2, feature_vector3)
-print("Distance between feature vectors 2 and 3 :", distance)
 
-distance = calculate_distance(feature_vector1, feature_vector3)
-print("Distance between feature vectors 1 and 3 :", distance)
+
+best_number = 100
+best_path = ""
+
+counter = 0
+# Loop through each folder in the archive directory
+for folder in os.listdir(archive_path):
+
+    folder_path = os.path.join(archive_path, folder)
+    
+    if os.path.isdir(folder_path):
+        # List all paths within the folder
+        for root, dirs, files in os.walk(folder_path):
+            for file_name in files:
+                if counter % 100 == 0:
+                    
+                    print("50 images processed")
+                if counter >= 4000:
+                    break
+                
+                photo_path = os.path.join(root, file_name)
+
+                if "lat_pulldown_g9.jpg" in photo_path:
+                    counter += 1
+                    continue
+
+                # Create an instance of pose_estimator for the current file
+                tiss, tass, keypoints_2 = pose_estimator_1.get_features(photo_path)
+
+                if tiss is not None:
+                    feature_vector2 = create_feature_vector(keypoints_2)
+                    distance = calculate_distance(feature_vector1, feature_vector2)
+                
+                    if distance < best_number:
+                        best_number = distance
+                        best_path = photo_path
+                    
+                    counter += 1
+                    del tiss, tass, keypoints_2
+                else:
+                    counter += 1
+    if counter >= 4000:
+        break
+    
+print(counter)
+print("best number", best_number)
+print("best path " ,best_path)
+
+# Load the images
+image1 = cv2.imread(test_1)
+image2 = cv2.imread(best_path)
+
+# Resize images to have the same height
+height = max(image1.shape[0], image2.shape[0])
+width1 = int(image1.shape[1] * height / image1.shape[0])
+width2 = int(image2.shape[1] * height / image2.shape[0])
+image1 = cv2.resize(image1, (width1, height))
+image2 = cv2.resize(image2, (width2, height))
+
+# Create a composite image by horizontally stacking the images
+composite_image = cv2.hconcat([image1, image2])
+
+# Display the composite image
+cv2.imshow("Best Image and Best Path", composite_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

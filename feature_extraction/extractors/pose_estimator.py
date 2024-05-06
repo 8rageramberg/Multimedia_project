@@ -26,40 +26,37 @@ Attributes:
     - photo_path (Str): path of current photo
 '''
 class pose_estimator:
-    name = "yalla"
+    name = "pose estimator"
     photo_path = None 
 
-    def __init__(self, photo_path, model_path = 'pose_landmarker_heavy'):
+    def __init__(self, model_path = 'pose_landmarker_heavy'):
         self.model_path = model_path
-        self.photo_path = photo_path
-        
-    def get_features(self, display=False):
-        mp_pose = mp.solutions.pose
-        mp_drawing = mp.solutions.drawing_utils
-
-        # Load the model
-        pose = mp_pose.Pose(
+        self.mp_pose = mp.solutions.pose
+        self.mp_drawing = mp.solutions.drawing_utils
+        self.pose = self.mp_pose.Pose(
             static_image_mode=True,         # individual image
-            model_complexity=2,             # accuracy (how advanced, 0, 1 or 2)
-            enable_segmentation=True,       # predict segmentation mask
-            smooth_segmentation=True,       # filter segmentation accross input to reduce jitter
+            model_complexity=1,             # accuracy (how advanced, 0, 1 or 2)
+            enable_segmentation=False,      # predict segmentation mask
+            smooth_segmentation=False,      # filter segmentation across input to reduce jitter
             min_detection_confidence=0.5,   # Minimum confidence for pose detection for "success"
             min_tracking_confidence=0.5     # Minimum confidence for pose tracking to be "success"
-        ) 
-
+        )
+        
+    def get_features(self, photo_path, display=False):
+        self.photo_path = photo_path
         # Read input image and cast to RGB
         image = cv2.imread(self.photo_path)
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Process the image and get pose landmarks
-        results = pose.process(image_rgb)
+        results = self.pose.process(image_rgb)
         landmarks = results.pose_landmarks
-
+    
         # Visualize the landmarks on the image
         if landmarks:
             annotated_image = image.copy()
-            mp_drawing.draw_landmarks(annotated_image, landmarks, mp_pose.POSE_CONNECTIONS)
-
+            self.mp_drawing.draw_landmarks(annotated_image, landmarks, self.mp_pose.POSE_CONNECTIONS)
+         
             if display:
                 cv2.imshow("Annotated Image", annotated_image)
                 cv2.waitKey(0)
@@ -75,8 +72,8 @@ class pose_estimator:
                                     })
             return annotated_image, landmarks, keypoints
         else:
-            print("something wrong with landnarks")
-            return None
+            print("something wrong with landmarks")
+            return None, None, None
         
     def get_name(self):
         return "Pose Estimation"
