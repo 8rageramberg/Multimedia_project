@@ -11,9 +11,10 @@ from extractors.sift_desc_detector import sift_desc_detector
 #print(new_detector.get_features().shape)
 
 for root, dirs, files in os.walk("/Users/tobiashusebo/Desktop/UIB_Datasci/Sjette_semester/FAG/COMP4425/PROJECT/PROJECT_FINAL/Multimedia_project/archive"):
-    for dir in dirs:
-        old_name = os.path.join(root, dir)
-        new_name = os.path.join(root, "_".join(dir.split(" ")))
+    for file in files:
+
+        old_name = os.path.join(root, file)
+        new_name = os.path.join(root, "_".join(file.split(" ")))
         os.rename(old_name, new_name)
 
 
