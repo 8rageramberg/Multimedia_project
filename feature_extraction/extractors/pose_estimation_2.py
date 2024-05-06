@@ -28,7 +28,7 @@ Class representing pose estimation.
 Attributes:
     - photo_path (Str): path of current photo
 '''
-class pose_estimation:
+class pose_estimation_2:
     name = "pose_estimation"
     photo_path = None 
 

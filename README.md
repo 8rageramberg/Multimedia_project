@@ -17,7 +17,7 @@ You need the following dependencies to run our application:
 - *mediapipe*
 	- pip install mediapipe==0.10.9 
 		- This version works on mac, ref reddit user Zazalios: https://www.reddit.com/r/learnpython/comments/1azbxyy/help_mediapipe_errors/
-	- MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task	
+	- Unsure if needed- brage: MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task	
 		- ref: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker#models
 
 **Installation:**
