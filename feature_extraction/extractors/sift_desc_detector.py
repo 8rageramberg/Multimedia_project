@@ -42,16 +42,9 @@ class sift_desc_detector:
         # Initialize sift object and utilize on the greyscale
         # of our image to retrieve descriptors:
         sift = cv.SIFT.create()
-
-        # TODO: FIX MASK MED BRAGE ALGO!!! 
-        key_points, descriptors = sift.detectAndCompute(gray_curr_photo, None)
         
-
-        # Display the image in a window
-        #img=cv.drawKeypoints(gray_curr_photo, key_points, curr_photo)
-        #cv.imshow('Image', img)
-        #cv.waitKey(0)
-        #cv.destroyAllWindows()
+        # TODO: Implementer PCA + 
+        key_points, descriptors = sift.detectAndCompute(gray_curr_photo, None)
 
         return descriptors
     
@@ -60,6 +53,9 @@ class sift_desc_detector:
         '''Getter function for getting extractor name'''
         return self.name
     
+
+
+
 
 
 
