@@ -8,15 +8,19 @@ import numpy as np
 sys.path.append("feature_extraction")
 from extractors.sift_desc_detector import sift_desc_detector 
 
+def setup():
+    # retrieving the directory to use for testing
+    directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    directory = os.path.join(directory, "archive", "A_test_set")
 
-# retrieving the directory to use for testing
-directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-directory = os.path.join(directory, "archive", "A_test_set")
+    # Iterating through images and making a list of image paths:
+    images_to_use = []
+    for root, _, files in os.walk(directory):
+        for file in files:
+            images_to_use.append(os.path.join(root, file))
 
-# Iterating through images and making a list of image paths:
-images_to_use = []
-for root, _, files in os.walk(directory):
-    for file in files:
-        images_to_use.append(os.path.join(root, file))
+    return images_to_use
 
-print(images_to_use)
+
+if __name__ == "__main__":
+    setup()
