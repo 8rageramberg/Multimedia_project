@@ -17,6 +17,7 @@ class sift_desc_detector:
 
     name = "SIFT descriptor detector"
     photo_path = None
+    features = None
 
     def __init__(self, photo_path=""):
         self.photo_path = photo_path

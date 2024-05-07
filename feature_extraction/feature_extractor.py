@@ -1,34 +1,31 @@
 from .extractors.pose_estimator import pose_estimator
 from .extractors.sift_desc_detector import sift_desc_detector
-from .extractors.extractor_2 import extractor_2
 
 
-'''
-A class reperesenting a feature extractor. The feature extractor has
-different extractor objects for specific extracting purposes.
-
-Attributes:
-    - photo_path (Str): path of current photo
-    - edge_detector (edge_detecor): Edge detector object
-    - list_of_extractor (List[extractors]): List of all extractors
-
-Functions:
-    - extract():              Function for extracting each feature of an image
-                              utilizing all extractors.
-
-    - set_photo_path(new_path): Function for setting the photo_path
-
-    - get_photo_path():        Function for retrieving the photo_path
-'''
 class feature_extractor:
+    '''
+    A class reperesenting a feature extractor. The feature extractor has
+    different extractor objects for specific extracting purposes.
+
+    Attributes:
+        - photo_path (Str): path of current photo
+        - list_of_extractor (List[extractors]): List of all extractors
+
+    Functions:
+        - extract():                        Function for extracting each feature of an image
+                                            utilizing all extractors.
+        
+        - compare(image_to_compare_path):   Function for comparing query image to image given
+
+        - extractAndSave():                 Function for extracting and saving DB Images
+
+        - set_photo_path(new_path):         Function for setting the photo_path
+
+        - get_photo_path():                 Function for retrieving the photo_path
+    '''
     # Class variables for storing photo path, feature_extractors
     # and all extractors in a list for future use.
     photo_path = None
-
-    pose_estimator = None
-    sift_desc_detector = None
-    extractor_2 = None
-
     list_of_extractors = []
 
 
@@ -37,30 +34,35 @@ class feature_extractor:
         # Set the path of the photo
         self.photo_path = photo_path
 
-        # TODO: Add more features
-        self.pose_estimator = pose_estimator(photo_path)
-        self.sift_desc_detector = sift_desc_detector(photo_path)
-        self.extractor_2 = extractor_2(photo_path)
-
         # TODO: For every feature added to list of feature extractors
-        self.list_of_feature_extractors.append(self.pose_estimator)
-        self.list_of_feature_extractors.append(self.sift_desc_detector)
-        self.list_of_feature_extractors.append(self.extractor_2)
+        self.list_of_feature_extractors.append(pose_estimator(photo_path))
+        self.list_of_feature_extractors.append(sift_desc_detector(photo_path))
 
 
-    '''
-    Main function for retrieving features.
-     
-    Returns:
-        - features (List[(Str, List[features])]): A list of tuples containing extractor name and featues
-    '''
+
     def extract(self):
+        '''
+        Main function for calculating features. Only used for QUERY IMAGE. Also called
+        by DB images during DB creation by extractAndSave().
+        
+        Returns:
+            - (List[features]): A list of features
+        '''
         # Extract features and return
-        features = [(extractor.get_name(), extractor.get_features()) for extractor in self.list_of_feature_extractors]
-        return features
+        return [extractor.get_features() for extractor in self.list_of_feature_extractors]
+
 
 
     def compare(self, image_to_compare_path):
+        '''
+        Main function for comparing to images to each other.
+
+        Parameters:
+            - image_to_compare_path (Str): String of the photo to compare agains query photo
+
+        Returns:
+            - Compare_output (Float):      Output after comparison between two photos
+        '''
         list_of_compare_outputs = [extractor.compare(image_to_compare_path) for extractor in self.list_of_feature_extractors]
         
         # TODO: Weight outputs for example (go through each output and put a weight):
@@ -71,6 +73,22 @@ class feature_extractor:
                 list_of_compare_outputs[index] = 0.3 * output #weighted output
             else:
                 list_of_compare_outputs[index] = 0.4 * output #weighted output
+
+        compare_output = sum(list_of_compare_outputs)
+
+        return compare_output
+
+
+
+    def extractAndSave(self):
+        '''
+        Main function used for extracting the features of DB Images and saving
+        them to the corresponding DB.
+        '''
+        features_to_save = self.extract()
+        # TODO: Save features to DB!
+
+
 
 
     '''Setter function for setting photo path'''
