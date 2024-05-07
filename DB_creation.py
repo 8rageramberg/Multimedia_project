@@ -19,6 +19,7 @@ def main():
                 images_to_use.append(os.path.join(root, file))
 
         # TODO: INITIATE DB CREATION
+        print(images_to_use[10:20])
 
     elif user_input.lower() == "q":
         print("Goodbye!")

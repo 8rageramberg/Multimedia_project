@@ -1,42 +1,30 @@
-import torch
-import torchvision.models as models
-import torchvision.transforms as transforms
-from PIL import Image
+import tensorflow as tf
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input
+import numpy as np
 
-class extractor_2:
-    name = "Extractor 2"
+class cnn:
+    name = "CNN"
     photo_path = None
 
     def __init__(self, photo_path=""):
         self.photo_path = photo_path
-        # Load a pre-trained ResNet-50 model
-        self.model = models.resnet50(pretrained=True)
-        # Remove the last fully connected layer (classification layer)
-        self.model.fc = torch.nn.Identity()
-        # Set the model to evaluation mode
-        self.model.eval()
+        self.model = VGG16(weights='imagenet', include_top=False)  # Load VGG16 without the classification layers
 
     def get_features(self):
-        # Define image transformations
-        transform = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
+        img = image.load_img(self.photo_path, target_size=(224, 224))  # VGG16 input size
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        x = preprocess_input(x)  # Preprocess the image for VGG16
 
-        # Load and preprocess the image
-        image = Image.open(self.photo_path)
-        image_tensor = transform(image).unsqueeze(0)  # Add a batch dimension
-
-        # Extract features using the ResNet-50 model
-        with torch.no_grad():
-            features = self.model(image_tensor)
-
-        # Convert features to a NumPy array (if needed)
-        features = features.numpy()
+        features = self.model.predict(x)  # Extract features using VGG16
+        features = features.flatten()  # Flatten the features into a vector
 
         return features
+    
+    def compare(self, descriptors_to_compare):
+        return np.linalg.norm(self.get_features - descriptors_to_compare)
 
     def get_name(self):
         return self.name
