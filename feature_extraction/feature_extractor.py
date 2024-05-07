@@ -1,4 +1,4 @@
-from .extractors.edge_detector import edge_detector
+from .extractors.pose_estimator import pose_estimator
 from .extractors.sift_desc_detector import sift_desc_detector
 from .extractors.extractor_2 import extractor_2
 
@@ -25,8 +25,8 @@ class feature_extractor:
     # and all extractors in a list for future use.
     photo_path = None
 
-    edge_detector = None
-    extractor_1 = None
+    pose_estimator = None
+    sift_desc_detector = None
     extractor_2 = None
 
     list_of_extractors = []
@@ -38,13 +38,13 @@ class feature_extractor:
         self.photo_path = photo_path
 
         # TODO: Add more features
-        self.edge_detector = edge_detector(photo_path)
-        self.extractor_1 = sift_desc_detector(photo_path)
+        self.pose_estimator = pose_estimator(photo_path)
+        self.sift_desc_detector = sift_desc_detector(photo_path)
         self.extractor_2 = extractor_2(photo_path)
 
         # TODO: For every feature added to list of feature extractors
-        self.list_of_feature_extractors.append(self.edge_detector)
-        self.list_of_feature_extractors.append(self.extractor_1)
+        self.list_of_feature_extractors.append(self.pose_estimator)
+        self.list_of_feature_extractors.append(self.sift_desc_detector)
         self.list_of_feature_extractors.append(self.extractor_2)
 
 
@@ -58,6 +58,19 @@ class feature_extractor:
         # Extract features and return
         features = [(extractor.get_name(), extractor.get_features()) for extractor in self.list_of_feature_extractors]
         return features
+
+
+    def compare(self, image_to_compare_path):
+        list_of_compare_outputs = [extractor.compare(image_to_compare_path) for extractor in self.list_of_feature_extractors]
+        
+        # TODO: Weight outputs for example (go through each output and put a weight):
+        for index, extractor, output in enumerate(zip(self.list_of_feature_extractors, list_of_compare_outputs)):
+            if (extractor.get_name() == "SIFT descriptor detector"):
+                list_of_compare_outputs[index] = 0.2 * output #weighted output
+            elif (extractor.get_name() == "Other extractor"):
+                list_of_compare_outputs[index] = 0.3 * output #weighted output
+            else:
+                list_of_compare_outputs[index] = 0.4 * output #weighted output
 
 
     '''Setter function for setting photo path'''
