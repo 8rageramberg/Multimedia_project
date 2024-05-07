@@ -59,6 +59,8 @@ class sift_desc_detector:
         top_indices = np.argsort(-responses)[:points_to_retrieve]
         top_descriptors = np.array([descriptors[index] for index in top_indices])
 
+        self.features = top_descriptors 
+
         return top_descriptors
         
     

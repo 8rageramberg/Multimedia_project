@@ -17,7 +17,7 @@ def main():
                 if os.path.basename(os.path.dirname(os.path.join(root, file))) == "Test_pullup":
                     continue
                 images_to_use.append(os.path.join(root, file))
-
+        
         # TODO: INITIATE DB CREATION
 
     elif user_input.lower() == "q":
