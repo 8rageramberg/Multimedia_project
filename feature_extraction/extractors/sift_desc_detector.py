@@ -23,7 +23,7 @@ class sift_desc_detector:
         
         
 
-    def get_features(self):
+    def get_features(self, nr_descriptors=50):
         '''
         This get_features function retrieves low dimensional
         sift descriptors of the current image:
@@ -46,11 +46,11 @@ class sift_desc_detector:
         key_points, descriptors = sift.detectAndCompute(gray_curr_photo, None)
 
 
-        # Sort the keypoints by "response strength" to only retrieve the 40
-        # descriptors of the keypoints with the highest response strength
-        # if image contains 40:
-        if len(key_points) >= 40:
-            points_to_retrieve = 40
+        # Sort the keypoints by "response strength" to only retrieve the
+        # nr_descriptors descriptors of the keypoints with the highest response
+        # strength if image contains nr_descriptors:
+        if len(key_points) >= nr_descriptors:
+            points_to_retrieve = nr_descriptors
         else:
             points_to_retrieve = len(key_points)
 
@@ -61,45 +61,34 @@ class sift_desc_detector:
         return top_descriptors
         
     
+    def compare(self, descriptors_to_compare):
+        return None
 
-
-
-    
-    def perform_PCA(self, descriptors):
-        '''
-        Function for performing PCA on the descriptors at hand.
-
-        Parameters:
-        - self (sift_desc_detector obj): Itself
-        - descriptors (np.array): Array containing the top 40 descriptors
-
-        Returns:
-        - pca (PCA object): Sklearn PCA object used during transform
-        - dim_reduced_descriptors(np.array): Dimensionality reduced array
-        '''
-
-        # Set PCA object to a secure random state and fit to the
-        # number of objects.
-        pca = PCA(random_state=22)
-        pca.fit(descriptors)
-
-        # Get the cumulative variance explained by each principal component:
-        list_of_cumulative_variance = [sum(pca.explained_variance_ratio_[:i+1]) for i in range(len(pca.explained_variance_ratio_))]
-        index_of_first_number_higher_than_90_percent = np.argmax(np.array(list_of_cumulative_variance) > 0.9)
-
-        # Set the number of dimensions based on the cumulative variance explained:
-        pca = PCA(n_components=index_of_first_number_higher_than_90_percent, random_state=22)
-        dim_reduced_descriptors = pca.fit_transform(descriptors)
-
-        return pca, dim_reduced_descriptors
-
-
-    
 
     def get_name(self):
         '''Getter function for getting extractor name'''
         return self.name
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -112,3 +101,32 @@ class sift_desc_detector:
 # - PCA sift: https://ieeexplore.ieee.org/document/1315206
 # - Cosine similarity: https://stackoverflow.com/questions/18424228/cosine-similarity-between-2-number-lists
 # - OPENCV Bruteforce: https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html
+
+# Unused:
+    # def perform_PCA(self, descriptors):
+    #     '''
+    #     Function for performing PCA on the descriptors at hand.
+
+    #     Parameters:
+    #     - self (sift_desc_detector obj): Itself
+    #     - descriptors (np.array): Array containing the top 40 descriptors
+
+    #     Returns:
+    #     - pca (PCA object): Sklearn PCA object used during transform
+    #     - dim_reduced_descriptors(np.array): Dimensionality reduced array
+    #     '''
+
+    #     # Set PCA object to a secure random state and fit to the
+    #     # number of objects.
+    #     pca = PCA(random_state=22)
+    #     pca.fit(descriptors)
+
+    #     # Get the cumulative variance explained by each principal component:
+    #     list_of_cumulative_variance = [sum(pca.explained_variance_ratio_[:i+1]) for i in range(len(pca.explained_variance_ratio_))]
+    #     index_of_first_number_higher_than_90_percent = np.argmax(np.array(list_of_cumulative_variance) > 0.9)
+
+    #     # Set the number of dimensions based on the cumulative variance explained:
+    #     pca = PCA(n_components=index_of_first_number_higher_than_90_percent, random_state=22)
+    #     dim_reduced_descriptors = pca.fit_transform(descriptors)
+
+    #     return pca, dim_reduced_descriptors
