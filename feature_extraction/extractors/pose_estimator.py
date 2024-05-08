@@ -26,7 +26,7 @@ Attributes:
     - photo_path (Str): path of current photo
 '''
 class pose_estimator:
-    name = "pose estimator"
+    name = "Pose_estimator"
     photo_path = None 
     
 
@@ -75,8 +75,15 @@ class pose_estimator:
             #return annotated_image, landmarks, keypoints
             return keypoints
         else:
-            print("something wrong with landmarks")
+            print("Something wrong with landmarks, features not retrieved")
             return None,
-        
+    
+
+
     def get_name(self):
-        return "Pose Estimation"
+        '''Getter function for getting extractor name'''
+        return self.name
+    
+    def set_new_photo(self, photo_path):
+        '''Setter function for setting a new photo'''
+        self.photo_path = photo_path

@@ -52,7 +52,7 @@ class feature_extractor:
             - (List[features]): A list of features
         '''
         # Extract features and return
-        return [extractor.get_features() for extractor in self.list_of_feature_extractors]
+        return [extractor.get_features() for extractor in self.list_of_extractors]
 
 
 
@@ -88,40 +88,31 @@ class feature_extractor:
         Main function used for extracting the features of DB Images and saving
         them to the corresponding DB.
         '''
-        for extractor in self.list_of_extractors:
+        # Extract features and save to DB:
+        list_of_features = self.extract()
+        for i, extractor in enumerate(self.list_of_extractors):
             extractor_name = extractor.get_name()
+            curr_features = list_of_features[i]
 
-            self._block_print()
-            features = extractor.get_features()
-            self._enable_print()
-            
-            df = pd.DataFrame({
-                'features': [features],
-                'photo_path': self.photo_path  # Assuming self.photo_path is a string or a URL
-            })
-            path_to_save = f"feature_DB/{extractor_name}_features.csv"
+            # Creating a pandas dataframe
+            df = pd.DataFrame({'features': [curr_features],'photo_path': self.photo_path})
+            save_path = f"feature_DB/{extractor_name}_features.csv"
 
-            # Check if the CSV file already exists
-            if os.path.isfile(path_to_save):
-                # Append new data as a new line to the existing CSV file
-                df.to_csv(path_to_save, mode='a', header=False, index=False)
-            else:
-                # If the CSV file doesn't exist, create it and write the data
-                df.to_csv(path_to_save, index=False)
+            # Check if the CSV file already exists, and append:
+            file_exists = os.path.isfile(save_path)
+            mode = "a" if file_exists else "w"  
+            header = False if file_exists else True
+            df.to_csv(save_path, mode=mode, header=header, index=False)
+
+
 
     '''Setter function for setting photo path'''
-    def set_photo_path(self, new_path):
+    def set_new_photo(self, new_path):
+        # Setting the new path and using list comp. to set extractors
         self.photo_path = new_path
+        _ = [ex.set_new_photo(new_path) for ex in self.list_of_extractors]
 
 
     '''Getter function for getting photo path'''
     def get_photo_path(self):
         return self.photo_path
-    
-    # Disable
-    def _block_print(self):
-        sys.stdout = open(os.devnull, 'w')
-
-    # Restore
-    def _enable_print(self):
-        sys.stdout = sys.__stdout__

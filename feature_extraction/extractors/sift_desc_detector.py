@@ -21,7 +21,7 @@ class sift_desc_detector:
                                            image to features given as a parameter.
     '''
 
-    name = "SIFT descriptor detector"
+    name = "SIFT_descriptor_detector"
     photo_path = None
     features = None
     nr_descriptors = None 
@@ -107,6 +107,11 @@ class sift_desc_detector:
     def get_name(self):
         '''Getter function for getting extractor name'''
         return self.name
+    
+
+    def set_new_photo(self, photo_path):
+        '''Setter function for setting a new photo'''
+        self.photo_path = photo_path
     
 
 

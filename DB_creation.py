@@ -8,20 +8,21 @@ warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf"
 
 # RUN TO CREATE DB
 def main():
-    counter = 0
+    # Initiate with user input:
     user_input = input("DO YOU WANT TO INITIATE DB CREATION? (Type yes to initiate / q to quit): ")
     if user_input.lower() == "yes": 
         # Retrieving the directory to use for testing
         directory = os.path.dirname((os.path.abspath(__file__)))
         directory = os.path.join(directory, "archive")
 
+        feature_extractor_db = feature_extractor()
+
         for root, _, files in os.walk(directory):
-            for file in files:
-                if counter % 100 == 0:
-                    print("1000 done fuckface")
+            for counter, file in enumerate(files):
 
                 absolute_file_path = os.path.join(root, file)
                 parent_folder = os.path.basename(os.path.dirname(os.path.join(root, file)))
+                if counter == 0: feature_extractor_db.set_new_photo(absolute_file_path)
 
                 # Ignore spesific folders and files
                 if parent_folder == "Test_plank":
@@ -30,13 +31,11 @@ def main():
                     continue
                 if "DS_Store" in absolute_file_path:
                     continue
-                
-                feature_extractor_db = feature_extractor(absolute_file_path)
-                #feature_extractor_db.set_photo_path()
 
-                # Save and extract:
+                # Update save and extract:
+                feature_extractor_db.set_new_photo(absolute_file_path)
                 feature_extractor_db.extractAndSave()
-                counter += 1
+                print(f"Picture {counter} successfully saved to DB.")
 
     elif user_input.lower() == "q":
         print("Goodbye!")
