@@ -1,6 +1,6 @@
 import os
-import sys
 import pandas as pd
+import numpy as np
 from extractors.pose_estimator import pose_estimator
 from extractors.sift_desc_detector import sift_desc_detector
 
