@@ -35,7 +35,7 @@ def main():
                 # Update save and extract:
                 feature_extractor_db.set_new_photo(absolute_file_path)
                 feature_extractor_db.extractAndSave()
-                print(f"Picture {counter} successfully saved to DB.")
+                print(f"Picture {counter+1} successfully saved to DB.")
 
     elif user_input.lower() == "q":
         print("Goodbye!")
