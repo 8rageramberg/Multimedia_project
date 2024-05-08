@@ -96,7 +96,6 @@ class feature_extractor:
 
             # Creating a pandas dataframe
             curr_photo_path = os.path.join("archive", os.path.dirname(self.photo_path).split(os.path.sep)[-1], os.path.basename(self.photo_path))
-            print(curr_photo_path)
             df = pd.DataFrame({'features': [curr_features],'photo_path': curr_photo_path})
             save_path = f"feature_DB/{extractor_name}_features.csv"
 
