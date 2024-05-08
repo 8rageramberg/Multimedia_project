@@ -12,8 +12,8 @@ import cv2
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# pip install mediapipe==0.10.9 
+ 
+# not sure if you need more than mediapipe, but keep in case
 # wget -O pose_landmarker.task -q https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 # MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 
@@ -28,9 +28,12 @@ Attributes:
 class pose_estimator:
     name = "pose estimator"
     photo_path = None 
+    
 
-    def __init__(self, model_path = 'pose_landmarker_heavy'):
+    def __init__(self, photo_path="", model_path = 'pose_landmarker_heavy'):
         self.model_path = model_path
+        self.photo_path = photo_path
+
         self.mp_pose = mp.solutions.pose
         self.mp_drawing = mp.solutions.drawing_utils
         self.pose = self.mp_pose.Pose(
@@ -42,8 +45,7 @@ class pose_estimator:
             min_tracking_confidence=0.5     # Minimum confidence for pose tracking to be "success"
         )
         
-    def get_features(self, photo_path, display=False):
-        self.photo_path = photo_path
+    def get_features(self, display=False):
         # Read input image and cast to RGB
         image = cv2.imread(self.photo_path)
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -70,10 +72,11 @@ class pose_estimator:
                                     'Z': feature.z,
                                     'Visibility': feature.visibility,
                                     })
-            return annotated_image, landmarks, keypoints
+            #return annotated_image, landmarks, keypoints
+            return keypoints
         else:
             print("something wrong with landmarks")
-            return None, None, None
+            return None,
         
     def get_name(self):
         return "Pose Estimation"

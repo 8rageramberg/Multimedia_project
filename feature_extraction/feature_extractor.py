@@ -1,5 +1,8 @@
-from .extractors.pose_estimator import pose_estimator
-from .extractors.sift_desc_detector import sift_desc_detector
+import os
+import sys
+import pandas as pd
+from extractors.pose_estimator import pose_estimator
+from extractors.sift_desc_detector import sift_desc_detector
 
 
 class feature_extractor:
@@ -35,8 +38,8 @@ class feature_extractor:
         self.photo_path = photo_path
 
         # TODO: For every feature added to list of feature extractors
-        self.list_of_feature_extractors.append(pose_estimator(photo_path))
-        self.list_of_feature_extractors.append(sift_desc_detector(photo_path))
+        self.list_of_extractors.append(sift_desc_detector(photo_path))
+        self.list_of_extractors.append(pose_estimator(photo_path))
 
 
 
@@ -85,11 +88,26 @@ class feature_extractor:
         Main function used for extracting the features of DB Images and saving
         them to the corresponding DB.
         '''
-        features_to_save = self.extract()
-        # TODO: Save features to DB!
+        for extractor in self.list_of_extractors:
+            extractor_name = extractor.get_name()
 
+            self._block_print()
+            features = extractor.get_features()
+            self._enable_print()
+            
+            df = pd.DataFrame({
+                'features': [features],
+                'photo_path': self.photo_path  # Assuming self.photo_path is a string or a URL
+            })
+            path_to_save = f"feature_DB/{extractor_name}_features.csv"
 
-
+            # Check if the CSV file already exists
+            if os.path.isfile(path_to_save):
+                # Append new data as a new line to the existing CSV file
+                df.to_csv(path_to_save, mode='a', header=False, index=False)
+            else:
+                # If the CSV file doesn't exist, create it and write the data
+                df.to_csv(path_to_save, index=False)
 
     '''Setter function for setting photo path'''
     def set_photo_path(self, new_path):
@@ -99,3 +117,11 @@ class feature_extractor:
     '''Getter function for getting photo path'''
     def get_photo_path(self):
         return self.photo_path
+    
+    # Disable
+    def _block_print(self):
+        sys.stdout = open(os.devnull, 'w')
+
+    # Restore
+    def _enable_print(self):
+        sys.stdout = sys.__stdout__
