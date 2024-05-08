@@ -75,7 +75,7 @@ class pose_estimator:
             #return annotated_image, landmarks, keypoints
             return keypoints
         else:
-            print("Something wrong with landmarks, features not retrieved")
+            #print("Something wrong with landmarks, features not retrieved")
             return None,
     
 
