@@ -95,7 +95,9 @@ class feature_extractor:
             curr_features = list_of_features[i]
 
             # Creating a pandas dataframe
-            df = pd.DataFrame({'features': [curr_features],'photo_path': self.photo_path})
+            curr_photo_path = os.path.join("archive", os.path.dirname(self.photo_path).split(os.path.sep)[-1], os.path.basename(self.photo_path))
+            print(curr_photo_path)
+            df = pd.DataFrame({'features': [curr_features],'photo_path': curr_photo_path})
             save_path = f"feature_DB/{extractor_name}_features.csv"
 
             # Check if the CSV file already exists, and append:
