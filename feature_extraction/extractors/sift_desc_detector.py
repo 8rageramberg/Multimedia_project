@@ -1,7 +1,5 @@
-from sklearn.decomposition import PCA
 import numpy as np
 import cv2 as cv
-import matplotlib.pyplot as plt
 
 
 class sift_desc_detector:
@@ -13,14 +11,25 @@ class sift_desc_detector:
 
     Attributes:
         - photo_path (Str): path of current photo
+
+    Functions:
+        - get_features(n_descriptors):     A function for calculating the sift descriptors of the
+                                           specified image. Returns a number of descriptors based on
+                                           the param set at utilization. Default = 50.
+
+        - compare(descriptors_to_compare): A function for comparing the features of the current
+                                           image to features given as a parameter.
     '''
 
     name = "SIFT descriptor detector"
     photo_path = None
     features = None
+    nr_descriptors = None 
+    good_match_ratio = None
 
-    def __init__(self, photo_path=""):
+    def __init__(self, photo_path="", good_match_ratio = 0.75):
         self.photo_path = photo_path
+        self.good_match_ratio = good_match_ratio
         
         
 
@@ -60,12 +69,39 @@ class sift_desc_detector:
         top_descriptors = np.array([descriptors[index] for index in top_indices])
 
         self.features = top_descriptors 
+        self.nr_descriptors = nr_descriptors
 
         return top_descriptors
         
     
     def compare(self, descriptors_to_compare):
-        return None
+        '''
+        A compare function to compare the features (descriptors) of
+        the current image to the features given as a param.
+
+        Parameters:
+            - descriptors_to_compare (nd.array): Array of descriptors
+
+        Returns:
+            - comparison_metric (float):         Metric evaluating comparison, float [0-100]
+        '''
+        # Utilizing the cv2 libraries brute force matcher
+        brute_force_matcher = cv.BFMatcher()
+        matches = brute_force_matcher.knnMatch(self.features, descriptors_to_compare, 2)
+
+        # Applying a ratio test (from: https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html)
+        good_matches = []
+        for neighbor_1, neighbor_2 in matches:
+            if (neighbor_1.distance < self.good_match_ratio*neighbor_2.distance):
+                good_matches.append([neighbor_1])
+
+        # Calculate metric:
+        num_good_matches = len(good_matches)
+        if num_good_matches == 0:
+            return 0
+        else:
+            return (num_good_matches / self.nr_descriptors)*100
+        
 
 
     def get_name(self):
