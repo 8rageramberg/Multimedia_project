@@ -71,7 +71,7 @@ class pose_estimator:
             - display (Boolean):              To display the features after retrieval
 
         Returns:
-            - keypoints (List[keypoint obj]): A list of keypoint objects representing
+            - keypoints (List[keypoint]): A list of keypoint objects representing
                                               the current image pose
         '''
         # Read input image and project onto other color space
@@ -102,20 +102,20 @@ class pose_estimator:
                                     'Z': feature.z,
                                     'Visibility': feature.visibility,
                                     })
-            self.own_keypoints = keypoints
-            return keypoints
+            
+            keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z'], kp['Visibility']) for kp in keypoints])
+            self.own_keypoints = keypoints_np
+            return keypoints_np
         else:
             #print("Something wrong with landmarks, features not retrieved")
             return None
-    
-    
 
     def compare(self, keypoints_to_compare):
         '''
         Function for comparing own keypoints agains other keypoint lists
 
         Parameters:
-            - keypoints_to_compare (List[keypoints obj]): List of keypoints to compare against
+            - keypoints_to_compare (List[keypoint]): List of keypoints to compare against
                                                           it's own.
 
         Returns:
@@ -129,9 +129,7 @@ class pose_estimator:
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
         for kp1, kp2 in zip(self.own_keypoints, keypoints_to_compare):
-            features_1 = np.array([kp1['X'], kp1['Y'], kp1['Z'], kp1['Visibility']])
-            features_2 = np.array([kp2['X'], kp2['Y'], kp2['Z'], kp2['Visibility']])
-            euclidean_dist.append(euclidean(features_1, features_2))
+            euclidean_dist.append(euclidean(kp1, kp2))
         
         # Flip so lower distances is higher similarity, then scale the similarity
         # score on a 1-100 range, and retrieve the mean score
