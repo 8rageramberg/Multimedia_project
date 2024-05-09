@@ -76,7 +76,7 @@ class pose_estimator:
                                     })
             return keypoints
         else:
-            print("Something wrong with landmarks, features not retrieved")
+            #print("Something wrong with landmarks, features not retrieved")
             return None
     
     # Compare compares two keypoint lists

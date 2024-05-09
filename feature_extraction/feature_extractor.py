@@ -15,16 +15,17 @@ class feature_extractor:
         - list_of_extractor (List[extractors]): List of all extractors
 
     Functions:
-        - extract():                        Function for extracting each feature of an image
-                                            utilizing all extractors.
+        - extract():                 Function for extracting each feature of an image
+                                     utilizing all extractors.
         
-        - compare(image_to_compare_path):   Function for comparing query image to image given
+        - compare():                 Function for comparing query image to a specific
+                                     image given.
 
-        - extractAndSave():                 Function for extracting and saving DB Images
+        - extractAndSave():          Function for extracting and saving DB Images
 
-        - set_photo_path(new_path):         Function for setting the photo_path
+        - set_photo_path(new_path):  Function for setting the photo_path
 
-        - get_photo_path():                 Function for retrieving the photo_path
+        - get_photo_path():          Function for retrieving the photo_path
     '''
     # Class variables for storing photo path, feature_extractors
     # and all extractors in a list for future use.
@@ -56,7 +57,7 @@ class feature_extractor:
 
 
 
-    def compare(self, image_to_compare_path):
+    def compare(self, image_to_compare_path, w1=0.2, w2=0.3, w3=0.4):
         '''
         Main function for comparing to images to each other.
 
@@ -70,12 +71,12 @@ class feature_extractor:
         
         # TODO: Weight outputs for example (go through each output and put a weight):
         for index, extractor, output in enumerate(zip(self.list_of_feature_extractors, list_of_compare_outputs)):
-            if (extractor.get_name() == "SIFT descriptor detector"):
-                list_of_compare_outputs[index] = 0.2 * output #weighted output
-            elif (extractor.get_name() == "Other extractor"):
-                list_of_compare_outputs[index] = 0.3 * output #weighted output
+            if (extractor.get_name() == "SIFT_descriptor_detector"):
+                list_of_compare_outputs[index] = w1 * output #weighted output
+            elif (extractor.get_name() == "Pose_estimator"):
+                list_of_compare_outputs[index] = w2 * output #weighted output
             else:
-                list_of_compare_outputs[index] = 0.4 * output #weighted output
+                list_of_compare_outputs[index] = w3 * output #weighted output
 
         compare_output = sum(list_of_compare_outputs)
 
@@ -93,6 +94,9 @@ class feature_extractor:
         for i, extractor in enumerate(self.list_of_extractors):
             extractor_name = extractor.get_name()
             curr_features = list_of_features[i]
+
+            # Check that we arent trunctuating the np.array:
+            if i == 0: curr_features = "".join(np.array2string(curr_features, threshold=np.inf).split("\n"))
 
             # Creating a pandas dataframe
             curr_photo_path = os.path.join("archive", os.path.dirname(self.photo_path).split(os.path.sep)[-1], os.path.basename(self.photo_path))
