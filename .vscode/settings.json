@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./feature_extraction"
+    ]
+}

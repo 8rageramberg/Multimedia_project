@@ -1,10 +1,11 @@
 import os
 import sys
-sys.path.append("feature_extraction")
-from feature_extraction.feature_extractor import feature_extractor
-
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf")
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "feature_extraction"))
+from feature_extractor import feature_extractor
+
+
 
 # RUN TO CREATE DB
 def main():
