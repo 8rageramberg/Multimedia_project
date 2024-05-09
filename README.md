@@ -17,6 +17,9 @@ You need the following dependencies to run our application:
 - *MediaPipe* Google's open source framework for building ML pipeline
 	- pip install --upgrade mediapipe
 
+- *Scipy* Python library for mathematical computations, such as euclidean distance
+	- pip install --upgrade scipy
+
 **Installation:**
 To install our application you can do the following steps:
 
