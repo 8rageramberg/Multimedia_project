@@ -33,8 +33,15 @@ class reverse_img_searcher:
             if i == 0:
                 continue
             if i == 1:
-                #db_1_line, db_2_line = db_1_line.split(","),  db_2_line.split(",")
-                print(db_2_line)
+                db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
+                
+                print(f"Length of DB 1 line: {len(db_1_line)}")
+                print(f"DB 1 line [1]: {db_1_line}")
+
+                print()
+
+                print(f"Length of DB 2 line: {len(db_2_line)}")
+                print(f"DB 1 line [1]: {db_2_line}")
 
         return 0
     

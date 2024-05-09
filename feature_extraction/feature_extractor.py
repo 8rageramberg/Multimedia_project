@@ -117,7 +117,7 @@ class feature_extractor:
             file_exists = os.path.isfile(save_path)
             mode = "a" if file_exists else "w"  
             header = False if file_exists else True
-            df.to_csv(save_path, mode=mode, header=header, index=False)
+            df.to_csv(save_path, sep="|", mode=mode, header=header, index=False)
 
 
 
