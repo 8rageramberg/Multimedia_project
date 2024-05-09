@@ -14,7 +14,7 @@ def main():
     if user_input.lower() == "yes": 
 
         # Retrieving the directory to use:
-        directory = os.path.dirname((os.path.abspath(__file__)))
+        directory = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
         directory = os.path.join(directory, "archive")
         feature_extractor_db = feature_extractor()
 

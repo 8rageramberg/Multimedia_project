@@ -32,11 +32,19 @@ class feature_extractor:
     photo_path = None
     list_of_extractors = []
 
+    pose_weight = None
+    sift_weight = None
+    cnn_weight = None
+
 
     # Initiate the feature extractor
-    def __init__(self, photo_path=""):
-        # Set the path of the photo
+    def __init__(self, photo_path="", sift_weight=0.2, pose_weight=0.3, cnn_weight=0.4):
+        # Set the path of the photo and weights:
         self.photo_path = photo_path
+        
+        self.sift_weight = sift_weight
+        self.pose_weight = pose_weight
+        self.cnn_weight = cnn_weight
 
         # TODO: For every feature added to list of feature extractors
         self.list_of_extractors.append(sift_desc_detector(photo_path))
@@ -57,7 +65,7 @@ class feature_extractor:
 
 
 
-    def compare(self, image_to_compare_path, w1=0.2, w2=0.3, w3=0.4):
+    def compare(self, image_to_compare_path):
         '''
         Main function for comparing to images to each other.
 
@@ -74,11 +82,11 @@ class feature_extractor:
         # TODO: Weight outputs for example (go through each output and put a weight):
         for index, extractor, output in enumerate(zip(self.list_of_feature_extractors, list_of_compare_outputs)):
             if (extractor.get_name() == "SIFT_descriptor_detector"):
-                list_of_compare_outputs[index] = w1 * output #weighted output
+                list_of_compare_outputs[index] = self.sift_weight * output #weighted output
             elif (extractor.get_name() == "Pose_estimator"):
-                list_of_compare_outputs[index] = w2 * output #weighted output
+                list_of_compare_outputs[index] = self.pose_weight * output #weighted output
             else:
-                list_of_compare_outputs[index] = w3 * output #weighted output
+                list_of_compare_outputs[index] = self.cnn_weight * output #weighted output
 
         compare_output = sum(list_of_compare_outputs)
 
