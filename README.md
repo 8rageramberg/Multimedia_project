@@ -14,11 +14,8 @@ You need the following dependencies to run our application:
 	- Conda install: `conda install -c conda-forge opencv`
 	- Pip install: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `!pip install opencv-python`
 
-- *mediapipe*
+- *MediaPipe* Google's open source framework for building ML pipeline
 	- pip install --upgrade mediapipe
-		- This version works on mac, ref reddit user Zazalios: https://www.reddit.com/r/learnpython/comments/1azbxyy/help_mediapipe_errors/
-	- Unsure if needed- brage: MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task	
-		- ref: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker#models
 
 **Installation:**
 To install our application you can do the following steps:
