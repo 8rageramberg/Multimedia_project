@@ -20,6 +20,9 @@ You need the following dependencies to run our application:
 - *Scipy* Python library for mathematical computations, such as euclidean distance
 	- pip install --upgrade scipy
 
+- *Flask* Python library for simple web app development
+	- pip install --upgrade flask
+
 **Installation:**
 To install our application you can do the following steps:
 
