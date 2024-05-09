@@ -106,7 +106,7 @@ class feature_extractor:
             curr_features = list_of_features[i]
 
             # Check that we arent trunctuating the np.array:
-            if i == 0: curr_features = "".join(np.array2string(curr_features, threshold=np.inf).split("\n"))
+            if i == 0: curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf)
 
             # Creating a pandas dataframe
             curr_photo_path = os.path.join("archive", os.path.dirname(self.photo_path).split(os.path.sep)[-1], os.path.basename(self.photo_path))

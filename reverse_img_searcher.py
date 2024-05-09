@@ -35,13 +35,11 @@ class reverse_img_searcher:
             if i == 1:
                 db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
                 
-                print(f"Length of DB 1 line: {len(db_1_line)}")
-                print(f"DB 1 line [1]: {db_1_line}")
+                print(db_1_line[0])
 
-                print()
-
-                print(f"Length of DB 2 line: {len(db_2_line)}")
-                print(f"DB 1 line [1]: {db_2_line}")
+                sift_features = np.fromstring(db_1_line[0])
+                print(sift_features)
+                
 
         return 0
     
