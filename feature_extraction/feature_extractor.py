@@ -68,6 +68,8 @@ class feature_extractor:
             - Compare_output (Float):      Output after comparison between two photos
         '''
         list_of_compare_outputs = [extractor.compare(image_to_compare_path) for extractor in self.list_of_feature_extractors]
+
+        # why not just compare_output = w1 * list_of_compare_outputs[0] + w2 * list_of_compare_outputs[1] + w3 * list_of_compare_outputs[2] ??
         
         # TODO: Weight outputs for example (go through each output and put a weight):
         for index, extractor, output in enumerate(zip(self.list_of_feature_extractors, list_of_compare_outputs)):
