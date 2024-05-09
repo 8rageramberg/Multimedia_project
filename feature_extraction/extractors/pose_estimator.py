@@ -76,11 +76,27 @@ class pose_estimator:
                                     })
             return keypoints
         else:
-            #print("Something wrong with landmarks, features not retrieved")
-            return None,
+            print("Something wrong with landmarks, features not retrieved")
+            return None
     
-
-
+    # Compare compares two keypoint lists
+    def compare(self, keypoints_1, keypoints_2):
+        if keypoints_1 is None or keypoints_2 is None:              # Error handeling, if landmarks on image did not exist None is returned, 
+            return 0                                                # if None, there is a 0% match
+        
+        euclidean_dist = []
+        for kp1, kp2 in zip(keypoints_1, keypoints_2):              # Loop keypoints and do euclidean distance for each row
+            features_1 = np.array([kp1['X'], kp1['Y'], kp1['Z'], kp1['Visibility']])
+            features_2 = np.array([kp2['X'], kp2['Y'], kp2['Z'], kp2['Visibility']])
+            euclidean_dist.append(euclidean(features_1, features_2))
+        
+        euclidean_dist_reshape = np.array(euclidean_dist).reshape(-1, 1)
+        scaled_dist = self.scaler.fit_transform(euclidean_dist_reshape)
+        similarity_scores = 1 - scaled_dist                         # Flip so lower distances is higher similarity
+        scaled_similarity_scores = similarity_scores * 100          # Scale the similarity scores to the 1-100 range
+        mean_similarity_score = np.mean(scaled_similarity_scores)   # Mean of scores
+        return mean_similarity_score
+        
     def get_name(self):
         '''Getter function for getting extractor name'''
         return self.name
