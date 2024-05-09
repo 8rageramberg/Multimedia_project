@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</title>
   <script>
+    let toggle = false;
     // Dark mode function
     function darkMode() {
       const body = document.body;
@@ -15,15 +16,34 @@
   </script>
 
 </head>
-
 <body>
+  
   <div class="container">
-    <div class="left-content">
-      <h1>Version 1.0.0</h1>
-      <button onclick="darkMode()">Dark Mode</button>
+    <div class="card">
+      <button class="button" onclick="darkMode()">Dark Mode</button>
+      <h1>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</h1>
+      <h2>Version 1.0.0</h2>
+      
+      <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit"  value="upload">
+      </form>
+    </div>
+
+    <div class="Images">
+      <div class="uploaded_image_left">
+        {% if filename %}
+        <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
+        {% endif %}
+      </div>
+
+      <div class="uploaded_image_right">
+        {% if filename %}
+        <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
+        {% endif %}
+      </div>
     </div>
   </div>
-
 </body>
 
 </html>
