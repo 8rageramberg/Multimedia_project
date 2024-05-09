@@ -1,5 +1,8 @@
 import mediapipe as mp
 import cv2
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from scipy.spatial.distance import euclidean
 
 # @title Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +20,6 @@ import cv2
 # wget -O pose_landmarker.task -q https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 # MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
 
-
 # https://github.com/google/mediapipe/blob/master/docs/solutions/pose.md
 '''
 Class representing pose estimation.
@@ -29,7 +31,6 @@ class pose_estimator:
     name = "Pose_estimator"
     photo_path = None 
     
-
     def __init__(self, photo_path="", model_path = 'pose_landmarker_heavy'):
         self.model_path = model_path
         self.photo_path = photo_path
@@ -38,23 +39,24 @@ class pose_estimator:
         self.mp_drawing = mp.solutions.drawing_utils
         self.pose = self.mp_pose.Pose(
             static_image_mode=True,         # individual image
-            model_complexity=1,             # accuracy (how advanced, 0, 1 or 2)
+            model_complexity=2,             # accuracy (how advanced, 0, 1 or 2)
             enable_segmentation=False,      # predict segmentation mask
             smooth_segmentation=False,      # filter segmentation across input to reduce jitter
             min_detection_confidence=0.5,   # Minimum confidence for pose detection for "success"
             min_tracking_confidence=0.5     # Minimum confidence for pose tracking to be "success"
         )
+
+        self.scaler = MinMaxScaler(feature_range=(0, 1))
         
     def get_features(self, display=False):
-        # Read input image and cast to RGB
-        image = cv2.imread(self.photo_path)
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = cv2.imread(self.photo_path)                 # Read input image
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Cast to RGB
 
         # Process the image and get pose landmarks
         results = self.pose.process(image_rgb)
         landmarks = results.pose_landmarks
     
-        # Visualize the landmarks on the image
+        # landmarks on the image
         if landmarks:
             annotated_image = image.copy()
             self.mp_drawing.draw_landmarks(annotated_image, landmarks, self.mp_pose.POSE_CONNECTIONS)
@@ -72,7 +74,6 @@ class pose_estimator:
                                     'Z': feature.z,
                                     'Visibility': feature.visibility,
                                     })
-            #return annotated_image, landmarks, keypoints
             return keypoints
         else:
             #print("Something wrong with landmarks, features not retrieved")
