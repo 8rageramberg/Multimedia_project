@@ -5,6 +5,7 @@
     text-align: center;
 }
 
+/* Middle card settings */
 .card {
     background-color: #8e8e8e;
     border-radius: 8px;
@@ -15,7 +16,11 @@
     text-align: center;
 }
 
-.button, input::file-selector-button:hover, input[type="submit"], input::file-selector-button {
+/* button and for effects */
+.button,
+input::file-selector-button:hover,
+input[type="submit"],
+input::file-selector-button {
     background-color: #535353;
     color: white;
     border: 2px;
@@ -26,7 +31,10 @@
     transition: background-color 0.3s ease;
 }
 
-.button:hover, input::file-selector-button:hover, input[type="submit"]:hover, .file-selector-button{
+.button:hover,
+input::file-selector-button:hover,
+input[type="submit"]:hover,
+.file-selector-button {
     background-color: #0056b3;
 }
 
@@ -41,7 +49,7 @@
 .uploaded_image_right {
     margin: 0 10px;
     border-radius: 8px;
-    overflow: hidden; /* Ensure the border-radius is applied correctly */
+    overflow: hidden;
 }
 
 .uploaded_image_left img,

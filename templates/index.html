@@ -16,21 +16,23 @@
   </script>
 
 </head>
+
 <body>
-  
+
   <div class="container">
+
     <div class="card">
       <button class="button" onclick="darkMode()">Dark Mode</button>
       <h1>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</h1>
       <h2>Version 1.0.0</h2>
-      
       <form method="POST" enctype="multipart/form-data">
         <input type="file" name="image">
-        <input type="submit"  value="upload">
+        <input type="submit" value="upload">
       </form>
     </div>
 
     <div class="Images">
+
       <div class="uploaded_image_left">
         {% if filename %}
         <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
@@ -42,8 +44,8 @@
         <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
         {% endif %}
       </div>
+
     </div>
   </div>
 </body>
-
 </html>
