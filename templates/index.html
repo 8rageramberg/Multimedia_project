@@ -6,46 +6,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</title>
-  <script>
-    let toggle = false;
-    // Dark mode function
-    function darkMode() {
-      const body = document.body;
-      body.classList.toggle("dark-mode");
-    }
-  </script>
 
+  <script>
+    let placeHolder = document.getElementById("placeHolder")
+    let inputImg = document.getElementById("input")
+
+    inputImg.onchange = function () {
+      let img = inputImg.files[0]
+      placeHolder.src = URL.createObjectURL(img);
+
+      let form = new FormData();
+      form.append("uploaded_img", img, 'uploaded_img.${fileExtension}');
+
+      fetch('/save_image', {
+        method: 'POST',
+        body: form
+      }).then(response => {
+        if (response.ok) {
+          console.log('Image uploaded successfully.');
+        } else {
+          console.error('Error uploading image.');
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+      });
+    };
+  </script>
 </head>
 
 <body>
-
+  <div>
   <div class="container">
-
     <div class="card">
-      <button class="button" onclick="darkMode()">Dark Mode</button>
-      <h1>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</h1>
-      <h2>Version 1.0.0</h2>
-      <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="submit" value="upload">
-      </form>
-    </div>
-
-    <div class="Images">
-
-      <div class="uploaded_image_left">
-        {% if filename %}
-        <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
-        {% endif %}
-      </div>
-
-      <div class="uploaded_image_right">
-        {% if filename %}
-        <img src="{{ url_for('static', filename=filename) }}" alt="Uploaded Image">
-        {% endif %}
-      </div>
-
+      <h1>What exercise am I doing?</h1>
+      <p>Version 1.0.0</p>
+      <img src='static/img.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
+      <label for="input"> Upload image</label>
+      <input type="file" accept="image/jpg image/jpeg" id="input">
     </div>
   </div>
+
+  <div class="container_2">
+    <h1>Your exercise looks like:</h1>
+    <div class="five_card">
+      <div class="img_card">
+        <img src="static/img.jpg" alt="Image 1">
+        <p type="score1">Description 1</p>
+      </div>
+      <div class="img_card">
+        <img src="static/img.jpg" alt="Image 2">
+        <p type="score1">Description 2</p>
+      </div>
+      <div class="img_card">
+        <img src="static/img.jpg" alt="Image 3">
+        <p type="score1">Description 3</p>
+      </div>
+      <div class="img_card">
+        <img src="static/img.jpg" alt="Image 4">
+        <p type="score1">Description 4</p>
+      </div>
+      <div class="img_card">
+        <img src="static/img.jpg" alt="Image 5">
+        <p type="score1">Description 5</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container_3">
+    <h2>We think you are doing:</h2>
+    <h1>THIS EXERCISE</h1>
+    <img src="static/img.jpg" type="VIDEO" style=>
+  </div>
+  
+
+
 </body>
+
 </html>

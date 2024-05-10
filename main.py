@@ -11,18 +11,15 @@ app = Flask(__name__, static_url_path='/static')
 def index():
     return render_template('index.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/save_image', methods=['POST'])
 def save_image():
-    if request.method == 'POST':
-            image = request.files['image']
-            if image:
-                # Save the uploaded file to the static directory
-                filename = 'uploaded_image.jpg'
-                filepath = 'static'
-                image.save(os.path.join(filepath, filename))
-                return render_template('index.html', filename=filename)
-            else:
-                return 'No image provided in the request', render_template('index.html')
+    if 'uploaded_img' in request.files:
+        uploaded_img = request.files['uploaded_img']
+
+        uploaded_img.save('static/uploaded_img.jpg')  # Adjust the save path as needed
+        return 'Image uploaded successfully.'
+
+    return 'No image uploaded.', 400
 
 def run_app():
     app.run(port=8000, debug=True) # If needed you can change port here
