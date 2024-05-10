@@ -47,6 +47,8 @@ class reverse_img_searcher:
             - comparisons_as_np_arr_sort[-nr_of_pics] (Slice of np.array): sorted np array with the nr_of_pics most
                                                                            alike photos.
         '''
+        print(f"\n####### STARTING SEARCH #######")
+        print(f"Picture used: {self.photo_path}\n\nWeights:\nSift weight: {self.photo_feature_extractor.sift_weight}\nPose weight: {self.photo_feature_extractor.pose_weight}\n\n########### RESULTS: ##########")
         algo_start_time = t.time()
         comparisons = []
         # Read the image DB and compare:
@@ -85,13 +87,16 @@ class reverse_img_searcher:
                 
                 # Use eval function to parse from string to python object:
                 photo_name = db_1_line[1]
-                sift_features = eval("np.array(" + db_1_line[0] + ", dtype=np.float32)").reshape(self.sift_nr_descriptors, 128)
-                if db_2_line[0] != "None": pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
-                else: pose_features = None
-
+                try:
+                    sift_features = eval("np.array(" + db_1_line[0] + ", dtype=np.float32)").reshape(self.sift_nr_descriptors, 128)
+                    if db_2_line[0] != "None": pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
+                    else: pose_features = None
+                except (ValueError):
+                    #print(db_2_line[1])//TODO: DEBUG
+                    continue
                 # Compare to DB:
                 comparisons.append((self.photo_feature_extractor.compare([sift_features, pose_features]), photo_name))
-
+                
 
     def _read_dbs(self):
         '''Read the feature DB and retrieve a list of each'''
