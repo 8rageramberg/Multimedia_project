@@ -38,7 +38,7 @@ class feature_extractor:
 
 
     # Initiate the feature extractor
-    def __init__(self, photo_path="", sift_weight=0.2, pose_weight=0.3, cnn_weight=0.4):
+    def __init__(self, photo_path="", sift_nr_descriptors=50, sift_weight=0.2, pose_weight=0.3, cnn_weight=0.4):
         # Set the path of the photo and weights:
         self.photo_path = photo_path
         
@@ -47,7 +47,7 @@ class feature_extractor:
         self.cnn_weight = cnn_weight
 
         # TODO: For every feature added to list of feature extractors
-        self.list_of_extractors.append(sift_desc_detector(photo_path))
+        self.list_of_extractors.append(sift_desc_detector(photo_path, nr_descriptors=sift_nr_descriptors))
         self.list_of_extractors.append(pose_estimator(photo_path))
 
 
@@ -106,7 +106,9 @@ class feature_extractor:
             curr_features = list_of_features[i]
 
             # Check that we arent trunctuating the np.array:
-            if i == 0: curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf)
+            if (i == 0): curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf, separator=",", precision=2)
+            elif (i == 1) and (curr_features is not None): curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf, separator=",")#, precision=4)
+            else: curr_features = "None"
 
             # Creating a pandas dataframe
             curr_photo_path = os.path.join("archive", os.path.dirname(self.photo_path).split(os.path.sep)[-1], os.path.basename(self.photo_path))

@@ -105,6 +105,7 @@ class pose_estimator:
             
             keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z'], kp['Visibility']) for kp in keypoints])
             self.own_keypoints = keypoints_np
+            
             return keypoints_np
         else:
             #print("Something wrong with landmarks, features not retrieved")

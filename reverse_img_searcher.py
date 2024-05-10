@@ -15,12 +15,16 @@ class reverse_img_searcher:
     '''
     photo_path = None
     photo_feature_extractor = None
+    sift_nr_descriptors = None
 
-    def __init__(self, photo_path="", sift_w=0.2, pose_w=0.3, cnn_w=0.4):
+    def __init__(self, photo_path="", sift_nr_descriptors=50, sift_w=0.2, pose_w=0.3, cnn_w=0.4):
         self.photo_path = photo_path
+        self.sift_nr_descriptors = sift_nr_descriptors
 
         # Initiate feature extractor and extract
-        self.photo_feature_extractor = feature_extractor(photo_path,sift_weight=sift_w,pose_weight=pose_w,cnn_weight=cnn_w)
+        self.photo_feature_extractor = feature_extractor(
+            photo_path, sift_nr_descriptors=sift_nr_descriptors,
+            sift_weight=sift_w, pose_weight=pose_w, cnn_weight=cnn_w)
         self.photo_feature_extractor.extract()
 
 
@@ -33,16 +37,21 @@ class reverse_img_searcher:
             if i == 0:
                 continue
             if i == 1:
+                # Stripping and splitting the DB lines with regards to "|" seperator
                 db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
                 
-                print(db_1_line[0])
+                # Use eval function to parse from string to python object:
+                sift_features = eval("np.array(" + db_1_line[0] + ")").reshape(self.sift_nr_descriptors, 128)
+                pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(4, 33)
 
-                sift_features = np.fromstring(db_1_line[0])
-                print(sift_features)
+                # TODO: FIX COMPARISON
+                #self.photo_feature_extractor.compare
+                
+
                 
 
         return 0
-    
+
 
     def read_dbs(self):
         with open("./feature_db/SIFT_descriptor_detector_features.csv", "r") as db_1:

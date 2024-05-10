@@ -23,17 +23,18 @@ class sift_desc_detector:
 
     name = "SIFT_descriptor_detector"
     photo_path = None
-    features = None
     nr_descriptors = None 
     good_match_ratio = None
+    features = None
 
-    def __init__(self, photo_path="", good_match_ratio = 0.75):
+    def __init__(self, photo_path="", nr_descriptors=50, good_match_ratio = 0.75):
         self.photo_path = photo_path
+        self.nr_descriptors = nr_descriptors
         self.good_match_ratio = good_match_ratio
         
         
 
-    def get_features(self, nr_descriptors=50):
+    def get_features(self):
         '''
         This get_features function retrieves low dimensional
         sift descriptors of the current image:
@@ -59,8 +60,8 @@ class sift_desc_detector:
         # Sort the keypoints by "response strength" to only retrieve the
         # nr_descriptors descriptors of the keypoints with the highest response
         # strength if image contains nr_descriptors:
-        if len(key_points) >= nr_descriptors:
-            points_to_retrieve = nr_descriptors
+        if len(key_points) >= self.nr_descriptors:
+            points_to_retrieve = self.nr_descriptors
         else:
             points_to_retrieve = len(key_points)
 
@@ -68,8 +69,7 @@ class sift_desc_detector:
         top_indices = np.argsort(-responses)[:points_to_retrieve]
         top_descriptors = np.array([descriptors[index] for index in top_indices])
 
-        self.features = top_descriptors 
-        self.nr_descriptors = nr_descriptors
+        self.features = top_descriptors
 
         return top_descriptors
         
