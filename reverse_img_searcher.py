@@ -41,11 +41,12 @@ class reverse_img_searcher:
                 db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
                 
                 # Use eval function to parse from string to python object:
-                sift_features = eval("np.array(" + db_1_line[0] + ")").reshape(self.sift_nr_descriptors, 128)
-                pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(4, 33)
+                sift_features = eval("np.array(" + db_1_line[0] + ", dtype=np.float32)").reshape(self.sift_nr_descriptors, 128)
+                pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
 
                 # TODO: FIX COMPARISON
-                #self.photo_feature_extractor.compare
+                comparisons.append(self.photo_feature_extractor.compare([sift_features, pose_features]))
+                print(comparisons)
                 
 
                 

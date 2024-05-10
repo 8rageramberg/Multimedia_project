@@ -65,31 +65,22 @@ class feature_extractor:
 
 
 
-    def compare(self, image_to_compare_path):
+    def compare(self, features_to_compare):
         '''
         Main function for comparing to images to each other.
 
         Parameters:
-            - image_to_compare_path (Str): String of the photo to compare agains query photo
+            - image_to_compare_path (List[features]): List of features of the photo to compare
+                                                      against query photo.
 
         Returns:
-            - Compare_output (Float):      Output after comparison between two photos
+            - Compare_output (Float):                 Output after comparison between two photos
         '''
-        list_of_compare_outputs = [extractor.compare(image_to_compare_path) for extractor in self.list_of_feature_extractors]
+        # Retrieve each compare outputs
+        list_of_compare_outputs = [extractor.compare(features) for extractor, features in zip(self.list_of_extractors, features_to_compare)]
 
-        # why not just compare_output = w1 * list_of_compare_outputs[0] + w2 * list_of_compare_outputs[1] + w3 * list_of_compare_outputs[2] ??
-        
-        # TODO: Weight outputs for example (go through each output and put a weight):
-        for index, extractor, output in enumerate(zip(self.list_of_feature_extractors, list_of_compare_outputs)):
-            if (extractor.get_name() == "SIFT_descriptor_detector"):
-                list_of_compare_outputs[index] = self.sift_weight * output #weighted output
-            elif (extractor.get_name() == "Pose_estimator"):
-                list_of_compare_outputs[index] = self.pose_weight * output #weighted output
-            else:
-                list_of_compare_outputs[index] = self.cnn_weight * output #weighted output
-
-        compare_output = sum(list_of_compare_outputs)
-
+        # Return the compare outputs as a sum
+        compare_output = (self.sift_weight * list_of_compare_outputs[0]) + (self.pose_weight * list_of_compare_outputs[1])
         return compare_output
 
 

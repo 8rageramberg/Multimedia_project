@@ -12,5 +12,3 @@ from reverse_img_searcher import reverse_img_searcher
 
 rev = reverse_img_searcher("./archive/hammer_curl/hammer_curl_100001.jpg")
 rev.search()
-
-# TODO: FIKS STRING MANIP, NP LIKER BARE 1D, RESHAPE ETTERPÅ!
