@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.csv filter=lfs diff=lfs merge=lfs -text
+feature_db/SIFT_descriptor_detector_features.csv filter=lfs diff=lfs merge=lfs -text
