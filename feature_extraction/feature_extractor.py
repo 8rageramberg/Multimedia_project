@@ -81,6 +81,9 @@ class feature_extractor:
 
         # Return the compare outputs as a sum
         compare_output = (self.sift_weight * list_of_compare_outputs[0]) + (self.pose_weight * list_of_compare_outputs[1])
+
+        # TODO: NORMALIZE ON SCALE FROM 0 - 100
+
         return compare_output
 
 

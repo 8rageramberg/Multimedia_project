@@ -11,4 +11,4 @@ for subdir in subdirectories:
 from reverse_img_searcher import reverse_img_searcher
 
 rev = reverse_img_searcher("./archive/hammer_curl/hammer_curl_100001.jpg")
-rev.search()
+print(rev.search())

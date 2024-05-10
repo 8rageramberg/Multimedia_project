@@ -8,10 +8,15 @@ class reverse_img_searcher:
     DB and retrieves the best result.
 
     Attributes:
-        - photo_path (Str): String of the current photo attached
+        - photo_path (Str):          String of the current photo attached
+        - sift_nr_descriptors (Int): Number of sift descriptors to use, def = 50
+        - sift_w (Int):              Weight of sift output when comparing, def = 0.2
+        - pose_w (Int):              Weight of pose estimation output when comparing, def = 0.3
+        - cnn_w (Int):               Weight of CNN output when comparing, def = 0.4
     
     Functions:
-        - ...():
+        - search():    Initiate reverse image search with query image. 
+        - _read_dbs(): Private function called by search to retrieve feature dbs.
     '''
     photo_path = None
     photo_feature_extractor = None
@@ -28,39 +33,66 @@ class reverse_img_searcher:
         self.photo_feature_extractor.extract()
 
 
-    def search(self):
-        comparisons = []
+    def search(self, nr_of_pics=5):
+        '''
+        This function starts the reverse image search utilizing the 
+        feature database and a feature extractor object to utilize
+        the features of the current query image
 
-        # Read DB:
-        db_1, db_2 = self.read_dbs()
+        Parameters:
+            - nr_of_pics (Int): Number of pics to retrieve, def = 5
+
+        Returns:
+            - comparisons_as_np_arr_sort[-nr_of_pics] (Slice of np.array): sorted np array with the nr_of_pics most
+                                                                           alike photos.
+
+        '''
+        comparisons = []
+        # Read the image DB and compare:
+        db_1, db_2 = self._read_dbs()
+        self._compare_to_db(db_1, db_2, comparisons)
+        
+        # Transform comparison array to np array and argsort and return the 3 photos with heighest comparison:
+        comparisons_as_np_arr = np.array(comparisons)
+        comparisons_as_np_arr_sort = comparisons_as_np_arr[np.argsort(comparisons_as_np_arr[:, 0])]
+
+        return comparisons_as_np_arr_sort[-nr_of_pics:] if nr_of_pics <= len(comparisons_as_np_arr_sort) else comparisons_as_np_arr_sort
+
+
+
+    def _compare_to_db(self, db_1, db_2, comparisons):
+        '''
+        Private function for comparing the query image
+        towards the feature db
+
+        Parameters:
+            - db_1 (List[Str]):           First feature db as a list of strings
+            - db_2 (List[Str]):           Second feature db as a list of strings
+            - comparisons (List[tuples]): List of tuples to append comparison and pic name to
+        '''
         for i, (db_1_line, db_2_line) in enumerate(zip(db_1, db_2)):
+            # If the line is not a header, compare db features against
+            # the query features.
             if i == 0:
                 continue
-            if i == 1:
+            else:
                 # Stripping and splitting the DB lines with regards to "|" seperator
                 db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
                 
                 # Use eval function to parse from string to python object:
+                photo_name = db_1_line[1]
                 sift_features = eval("np.array(" + db_1_line[0] + ", dtype=np.float32)").reshape(self.sift_nr_descriptors, 128)
-                pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
+                if db_2_line[0] != "None": pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
+                else: pose_features = None
 
-                # TODO: FIX COMPARISON
-                comparisons.append(self.photo_feature_extractor.compare([sift_features, pose_features]))
-                print(comparisons)
-                
-
-                
-
-        return 0
+                # Compare to DB:
+                comparisons.append((self.photo_feature_extractor.compare([sift_features, pose_features]), photo_name))
 
 
-    def read_dbs(self):
+    def _read_dbs(self):
+        '''Read the feature DB and retrieve a list of each'''
         with open("./feature_db/SIFT_descriptor_detector_features.csv", "r") as db_1:
             db_1 = db_1.readlines()
         with open("./feature_db/Pose_estimator_features.csv", "r") as db_2:
             db_2 = db_2.readlines()
         return db_1, db_2
-
-
-    def from_DB_to_array(self):
-        return 0
