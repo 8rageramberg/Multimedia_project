@@ -1,5 +1,6 @@
 from feature_extraction.feature_extractor import feature_extractor
 import numpy as np
+import time as t
 
 class reverse_img_searcher:
     '''
@@ -45,8 +46,8 @@ class reverse_img_searcher:
         Returns:
             - comparisons_as_np_arr_sort[-nr_of_pics] (Slice of np.array): sorted np array with the nr_of_pics most
                                                                            alike photos.
-
         '''
+        algo_start_time = t.time()
         comparisons = []
         # Read the image DB and compare:
         db_1, db_2 = self._read_dbs()
@@ -55,7 +56,10 @@ class reverse_img_searcher:
         # Transform comparison array to np array and argsort and return the 3 photos with heighest comparison:
         comparisons_as_np_arr = np.array(comparisons)
         comparisons_as_np_arr_sort = comparisons_as_np_arr[np.argsort(comparisons_as_np_arr[:, 0])]
+        algo_end_time = t.time()
 
+        # Print algo time to terminal:
+        print(f"The reverse image search took: {algo_end_time-algo_start_time:.2f} seconds") 
         return comparisons_as_np_arr_sort[-nr_of_pics:] if nr_of_pics <= len(comparisons_as_np_arr_sort) else comparisons_as_np_arr_sort
 
 
