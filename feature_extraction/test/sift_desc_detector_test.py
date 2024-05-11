@@ -36,8 +36,8 @@ def setup(utilize_test_set=False):
 
 def initiate_SIFT(query_image, num_descs=40, ratio=0.75):
     # Set query image and initiate SIFT:
-    sift_object = sift_desc_detector(query_image, good_match_ratio=ratio)
-    sift_object.get_features(nr_descriptors=num_descs)
+    sift_object = sift_desc_detector(query_image, nr_descriptors=num_descs, good_match_ratio=ratio)
+    sift_object.get_features()
 
     # Retrieve features of curr object:
     return sift_object
