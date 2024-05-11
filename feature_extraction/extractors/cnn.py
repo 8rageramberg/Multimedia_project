@@ -24,7 +24,8 @@ class cnn:
         return features
     
     def compare(self, descriptors_to_compare):
-        return np.linalg.norm(self.get_features() - descriptors_to_compare)
+        distance = np.linalg.norm((self.get_features() - descriptors_to_compare) / 2500 * 100)
+        return 100 - (distance / 5000) * 100
 
     def get_name(self):
         return self.name
