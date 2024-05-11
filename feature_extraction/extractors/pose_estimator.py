@@ -100,14 +100,12 @@ class pose_estimator:
                                     'X': feature.x,
                                     'Y': feature.y,
                                     'Z': feature.z,
-                                    
+                                    'Visibility': feature.visibility
                                     })
             # 'Visibility': feature.visibility,
             #, kp['Visibility']
-            keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z']) for kp in keypoints])
-            print(keypoints_np)
+            keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z'], kp['Visibility']) for kp in keypoints])
             self.own_keypoints = keypoints_np
-            
             return keypoints_np
         else:
             #print("Something wrong with landmarks, features not retrieved")
@@ -132,28 +130,18 @@ class pose_estimator:
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
         for kp1, kp2 in zip(self.own_keypoints, keypoints_to_compare):
-            print("KAHSFjhosdhfkhslfjk")
-            print(kp1)
-            print(kp2)
-            print(euclidean(kp1, kp2))
-
-            
-            break
             euclidean_dist.append(euclidean(kp1, kp2))
-        
+
         # Flip so lower distances is higher similarity, then scale the similarity
         # score on a 1-100 range, and retrieve the mean score
         euclidean_dist_reshape = np.array(euclidean_dist).reshape(-1, 1)
-        scaled_dist = self.scaler.fit_transform(euclidean_dist_reshape)
-        similarity_scores = 1 - scaled_dist
-        scaled_similarity_scores = similarity_scores * 100
-        mean_similarity_score = np.mean(scaled_similarity_scores)   
+       
+        mean_eculidean = 1 - np.mean(euclidean_dist_reshape)/2.4494897428   
+        mean_similarity_score = 100*(mean_eculidean)
 
-
-
+        #similarity_scores = 100 - scaled_dist
         return mean_similarity_score
-        
-
+    
 
     def get_name(self):
         '''Getter function for getting extractor name'''
