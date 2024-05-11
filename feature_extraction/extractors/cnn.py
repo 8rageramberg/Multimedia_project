@@ -24,7 +24,7 @@ class cnn:
         return features
     
     def compare(self, descriptors_to_compare):
-        return np.linalg.norm(self.get_features - descriptors_to_compare)
+        return np.linalg.norm(self.get_features() - descriptors_to_compare)
 
     def get_name(self):
         return self.name

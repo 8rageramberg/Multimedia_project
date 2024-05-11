@@ -2,14 +2,14 @@ import os
 import sys
 import numpy as np
 sys.path.append("feature_extraction")
-from extractors.cnn import extractor_2  # Make sure to import your class correctly
+from extractors.cnn import cnn  # Make sure to import your class correctly
 
 def extract_features(directory):
     # Dictionary to store the path and features
     features_dict = {}
 
     # Initialize the feature extractor
-    extractor = extractor_2()
+    extractor = cnn()
 
     # Walk through all directories and subdirectories
     for subdir, dirs, files in os.walk(directory):
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     dataset_features = extract_features(dataset_directory)
 
     # Initialize the extractor and extract features from the query image
-    query_extractor = extractor_2(query_image_path)
+    query_extractor = cnn(query_image_path)
     query_features = query_extractor.get_features()
 
     # Find and print the closest image
@@ -57,14 +57,14 @@ import os
 import sys
 import numpy as np
 sys.path.append("feature_extraction")
-from extractors.cnn import extractor_2  # Make sure to import your class correctly
+from extractors.cnn import cnn  # Make sure to import your class correctly
 
 def extract_features(directory):
     # Dictionary to store the path and features
     features_dict = {}
 
     # Initialize the feature extractor
-    extractor = extractor_2()
+    extractor = cnn()
 
     # Walk through all directories and subdirectories
     for subdir, dirs, files in os.walk(directory):
@@ -74,7 +74,7 @@ def extract_features(directory):
                 extractor.photo_path = full_path  # Update the photo_path for the extractor
                 img_features = extractor.get_features()  # Extract features
                 features_dict[full_path] = img_features
-                print(f"Extracted features for {full_path}")
+                print(f"Extracted features for {full_path}, norm is {np.linalg.norm(img_features)}")
 
     return features_dict
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     dataset_features = extract_features(dataset_directory)
 
     # Initialize the extractor and extract features from the query image
-    query_extractor = extractor_2(query_image_path)
+    query_extractor = cnn(query_image_path)
     query_features = query_extractor.get_features()
 
     # Find and print the closest image
