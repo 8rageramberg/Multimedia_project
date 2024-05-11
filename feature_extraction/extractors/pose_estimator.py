@@ -100,10 +100,12 @@ class pose_estimator:
                                     'X': feature.x,
                                     'Y': feature.y,
                                     'Z': feature.z,
-                                    'Visibility': feature.visibility,
+                                    
                                     })
-            
-            keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z'], kp['Visibility']) for kp in keypoints])
+            # 'Visibility': feature.visibility,
+            #, kp['Visibility']
+            keypoints_np = np.array([(kp['X'], kp['Y'], kp['Z']) for kp in keypoints])
+            print(keypoints_np)
             self.own_keypoints = keypoints_np
             
             return keypoints_np
@@ -130,6 +132,13 @@ class pose_estimator:
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
         for kp1, kp2 in zip(self.own_keypoints, keypoints_to_compare):
+            print("KAHSFjhosdhfkhslfjk")
+            print(kp1)
+            print(kp2)
+            print(euclidean(kp1, kp2))
+
+            
+            break
             euclidean_dist.append(euclidean(kp1, kp2))
         
         # Flip so lower distances is higher similarity, then scale the similarity
@@ -139,6 +148,9 @@ class pose_estimator:
         similarity_scores = 1 - scaled_dist
         scaled_similarity_scores = similarity_scores * 100
         mean_similarity_score = np.mean(scaled_similarity_scores)   
+
+
+
         return mean_similarity_score
         
 
