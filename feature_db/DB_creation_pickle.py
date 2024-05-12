@@ -38,7 +38,7 @@ def main():
                 parent_folder = os.path.basename(os.path.dirname(os.path.join(root, file)))
                 if counter == 0: 
                     feature_extractor_db.set_new_photo(absolute_file_path)
-                    if os.path.isfile("feature_DB/Pose_estimator_features.csv"):
+                    if os.path.isfile("feature_DB/Pose_estimator_features.pkl"):
                         print("Folder DONE!\n")
 
                 # IGNORE SPECIFIC FOLDERS:

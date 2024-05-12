@@ -11,5 +11,6 @@ for subdir in subdirectories:
 ##### MAIN2.py #####
 from reverse_img_searcher_pickle import reverse_img_searcher_pickle as rev_search
 
-rev = rev_search("/Users/tobiashusebo/Desktop/UIB_Datasci/Sjette_semester/FAG/COMP4425/PROJECT/PROJECT_FINAL/Multimedia_project/archive/barbell_biceps_curl/barbell_biceps_curl_100001.jpg", sift_w=0, pose_w=0, cnn_w=1)
+rev = rev_search("./archive/barbell_biceps_curl/barbell_biceps_curl_100001.jpg", sift_w=0, pose_w=0.3, cnn_w=1)
 print(rev.search())
+
