@@ -139,6 +139,6 @@ class feature_extractor:
 
 
 # TESTING:
-photo_path = "/Users/tobiashusebo/Desktop/UIB_Datasci/Sjette_semester/FAG/COMP4425/PROJECT/PROJECT_FINAL/Multimedia_project/archive/brage_test/pushup1_brage.jpeg"
-tester = feature_extractor(photo_path)
-tester.extractAndSave()
+#photo_path = "/"
+#tester = feature_extractor(photo_path)
+#tester.extractAndSave()

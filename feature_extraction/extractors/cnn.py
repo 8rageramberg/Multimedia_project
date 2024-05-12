@@ -3,6 +3,8 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 import numpy as np
+import sys
+import os
 
 class cnn:
     name = "CNN"
@@ -19,8 +21,18 @@ class cnn:
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)  # Preprocess the image for VGG16
 
+        # Stop standard output and standard error
+        original_stdout = sys.stdout
+        original_stderr = sys.stderr
+        sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
+
         features = self.model.predict(x)  # Extract features using VGG16
         features = features.flatten()  # Flatten the features into a vector
+
+        # Restore standard output and standard error
+        sys.stdout = original_stdout
+        sys.stderr = original_stderr
 
         self.features = features
         return features

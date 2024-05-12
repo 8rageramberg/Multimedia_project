@@ -23,11 +23,11 @@ from reverse_img_searcher import reverse_img_searcher
 #         print("################################\n\n")
 
 
-rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=1, pose_w=0, cnn_w=0)
+rev = reverse_img_searcher("./archive/brage_test/bb_1.jpeg", sift_w=1, pose_w=0, cnn_w=0)
 print(rev.search())
 
-rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=0, pose_w=1, cnn_w=0)
+rev = reverse_img_searcher("./archive/brage_test/bb_1.jpeg", sift_w=0, pose_w=1, cnn_w=0)
 print(rev.search())
 
-rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=0, pose_w=0, cnn_w=1)
+rev = reverse_img_searcher("./archive/brage_test/bb_1.jpeg", sift_w=0, pose_w=0, cnn_w=1)
 print(rev.search())

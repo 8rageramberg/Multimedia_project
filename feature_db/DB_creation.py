@@ -7,7 +7,6 @@ from feature_extractor import feature_extractor
 import time as t
 
 
-
 # RUN TO CREATE DB
 def main():
     # Initiate with user input:
