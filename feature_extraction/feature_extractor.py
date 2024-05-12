@@ -89,7 +89,7 @@ class feature_extractor:
         return compare_output
 
 
-
+    # UNUSED AS OF NOW, DO NOT USE!
     def extractAndSave(self):
         '''
         Main function used for extracting the features of DB Images and saving
@@ -124,21 +124,18 @@ class feature_extractor:
 
 
 
-    '''Setter function for setting photo path'''
     def set_new_photo(self, new_path):
+        '''Setter function for setting photo path'''
         # Setting the new path and using list comp. to set extractors
         self.photo_path = new_path
         _ = [ex.set_new_photo(new_path) for ex in self.list_of_extractors]
 
 
-    '''Getter function for getting photo path'''
     def get_photo_path(self):
+        '''Getter function for getting photo path'''
         return self.photo_path
     
 
-
-
-# TESTING:
-#photo_path = "/"
-#tester = feature_extractor(photo_path)
-#tester.extractAndSave()
+    def get_names(self):
+        '''Getter function for getting feature names'''
+        return [extractor.get_name() for extractor in self.list_of_extractors]
