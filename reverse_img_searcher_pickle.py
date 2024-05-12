@@ -32,7 +32,7 @@ class reverse_img_searcher_pickle:
 
         # Initiate feature extractor and extract
         self.photo_feature_extractor = feature_extractor(
-            photo_path, sift_nr_descriptors=sift_nr_descriptors,
+            self.photo_path, sift_nr_descriptors=sift_nr_descriptors,
             sift_weight=sift_w, pose_weight=pose_w, cnn_weight=cnn_w)
         self.photo_feature_extractor.extract()
 
@@ -56,9 +56,8 @@ class reverse_img_searcher_pickle:
         algo_start_time = t.time()
 
         # Read the image DB and compare:
-        comparisons = []
         db_1, db_2, db_3 = self._read_dbs()
-        self._compare_to_db(db_1, db_2, db_3, comparisons)
+        comparisons = self._compare_to_db(db_1, db_2, db_3)
         
         # Transform comparison array to np array and argsort:
         comparisons_as_np_arr = np.array(comparisons)
@@ -71,7 +70,7 @@ class reverse_img_searcher_pickle:
 
 
 
-    def _compare_to_db(self, db_1, db_2, db_3, comparisons):
+    def _compare_to_db(self, db_1, db_2, db_3):
         '''
         Private function for comparing the query image towards the feature db
 
@@ -79,11 +78,14 @@ class reverse_img_searcher_pickle:
             - db_1 (pd.Dataframe):        First feature db as a Dataframe
             - db_2 (pd.Dataframe):        Second feature db as a Dataframe
             - db_3 (pd.Dataframe):        Third feature db as a Dataframe
+
+        Returns:
             - comparisons (List[tuples]): List of tuples to append comparison and pic name to
         '''
+        comparisons = []
         for i in db_1.index:
             comparisons.append((self.photo_feature_extractor.compare([db_1['Feature'][i], db_2['Feature'][i], db_3['Feature'][i]]), db_1['Filename'][i]))
-                
+        return comparisons
 
     def _read_dbs(self):
         ''' Private function for reading the DB'''

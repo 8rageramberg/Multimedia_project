@@ -31,7 +31,7 @@ class feature_extractor:
     # Class variables for storing photo path, feature_extractors
     # and all extractors in a list for future use.
     photo_path = None
-    list_of_extractors = []
+    list_of_extractors = None
 
     pose_weight = None
     sift_weight = None
@@ -46,6 +46,8 @@ class feature_extractor:
         self.sift_weight = sift_weight
         self.pose_weight = pose_weight
         self.cnn_weight = cnn_weight
+
+        self.list_of_extractors = []
 
         # TODO: For every feature added to list of feature extractors
         self.list_of_extractors.append(sift_desc_detector(photo_path, nr_descriptors=sift_nr_descriptors))
