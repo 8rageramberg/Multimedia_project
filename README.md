@@ -22,6 +22,10 @@ You need the following dependencies to run our application:
 
 - *Flask* Python library for simple web app development
 	- pip install --upgrade flask
+ - *Keras*
+   	- pip install keras
+- *Tensorflow*
+	- pip install tensorflow 
 
 **Installation:**
 To install our application you can do the following steps:
