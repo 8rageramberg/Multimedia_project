@@ -58,7 +58,21 @@ p {
     line-height: 40px;
 }
 
-.container label:hover {
+.container button {
+    display: inline-block;
+    width: 200px;
+    height: 40px;
+    margin: 5px;
+    text-align: center;
+    background-color: aliceblue;
+    align-self: center;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 40px;
+
+}
+
+.container button:hover, label:hover {
     background-color: rgb(103, 103, 185);
 }
 
@@ -74,6 +88,7 @@ p {
 input {
     display: none;
 }
+
 
 .container_2 {
     width: 100%;

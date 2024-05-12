@@ -11,9 +11,10 @@ class cnn:
     photo_path = None
     features = None
 
-    def __init__(self, photo_path=""):
+    def __init__(self, photo_path="", weights_path="/Users/brageramberg/Desktop/Multimedia_project/feature_extraction/extractors/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5"):
         self.photo_path = photo_path
-        self.model = VGG16(weights='imagenet', include_top=False)  # Load VGG16 without the classification layers
+        self.model = VGG16(weights=None, include_top=False)  # Load VGG16 without the classification layers
+        self.model.load_weights(weights_path)
 
     def get_features(self):
         img = image.load_img(self.photo_path, target_size=(224, 224))  # VGG16 input size
