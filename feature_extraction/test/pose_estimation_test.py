@@ -25,6 +25,16 @@ best_match_my_photo = "archive/barbell_biceps_curl/barbell_biceps_curl_4300081.j
 
 #best_match_my_photo = 'archive/A_test_set/Test_plank/plank_100051_copy.jpg'
 
+
+
+
+################################################################################################
+################################################################################################
+################################################################################################
+
+
+
+
 input_path = "/Users/brageramberg/Desktop/Multimedia_project/archive/brage_test/pushup1_brage.jpeg"
 
 estimator = pose_estimator(input_path)

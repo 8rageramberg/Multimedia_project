@@ -7,6 +7,7 @@ import numpy as np
 class cnn:
     name = "CNN"
     photo_path = None
+    features = None
 
     def __init__(self, photo_path=""):
         self.photo_path = photo_path
@@ -21,11 +22,16 @@ class cnn:
         features = self.model.predict(x)  # Extract features using VGG16
         features = features.flatten()  # Flatten the features into a vector
 
+        self.features = features
         return features
     
     def compare(self, descriptors_to_compare):
-        distance = np.linalg.norm((self.get_features() - descriptors_to_compare) / 2500 * 100)
+        distance = np.linalg.norm((self.features - descriptors_to_compare) / 2500 * 100)
         return 100 - (distance / 5000) * 100
 
     def get_name(self):
         return self.name
+
+    def set_new_photo(self, photo_path):
+        '''Setter function for setting a new photo'''
+        self.photo_path = photo_path

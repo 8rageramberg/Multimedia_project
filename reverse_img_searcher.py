@@ -1,6 +1,7 @@
 from feature_extraction.feature_extractor import feature_extractor
 import numpy as np
 import time as t
+import os
 
 class reverse_img_searcher:
     '''
@@ -47,26 +48,28 @@ class reverse_img_searcher:
             - comparisons_as_np_arr_sort[-nr_of_pics] (Slice of np.array): sorted np array with the nr_of_pics most
                                                                            alike photos.
         '''
+        # PRINT OUT ALGO TIME:
         print(f"\n####### STARTING SEARCH #######")
-        print(f"Picture used: {self.photo_path}\n\nWeights:\nSift weight: {self.photo_feature_extractor.sift_weight}\nPose weight: {self.photo_feature_extractor.pose_weight}\n\n########### RESULTS: ##########")
+        print(f"Picture used: {self.photo_path}\n\nWeights:\nSift weight: {self.photo_feature_extractor.sift_weight}\nPose weight: {self.photo_feature_extractor.pose_weight}\nCNN weight: {self.photo_feature_extractor.cnn_weight}\n\n########### RESULTS: ##########")
         algo_start_time = t.time()
-        comparisons = []
+
         # Read the image DB and compare:
-        db_1, db_2 = self._read_dbs()
-        self._compare_to_db(db_1, db_2, comparisons)
+        comparisons = []
+        db_1, db_2, db_3 = self._read_dbs()
+        self._compare_to_db(db_1, db_2, db_3, comparisons)
         
-        # Transform comparison array to np array and argsort and return the 3 photos with heighest comparison:
+        # Transform comparison array to np array and argsort:
         comparisons_as_np_arr = np.array(comparisons)
         comparisons_as_np_arr_sort = comparisons_as_np_arr[np.argsort(comparisons_as_np_arr[:, 0])]
+        
+        # Print algo time to terminal and return the nr_of_pics photos with heighest comparison:
         algo_end_time = t.time()
-
-        # Print algo time to terminal:
         print(f"The reverse image search took: {algo_end_time-algo_start_time:.2f} seconds") 
         return comparisons_as_np_arr_sort[-nr_of_pics:] if nr_of_pics <= len(comparisons_as_np_arr_sort) else comparisons_as_np_arr_sort
 
 
 
-    def _compare_to_db(self, db_1, db_2, comparisons):
+    def _compare_to_db(self, db_1, db_2, db_3, comparisons):
         '''
         Private function for comparing the query image
         towards the feature db
@@ -74,16 +77,17 @@ class reverse_img_searcher:
         Parameters:
             - db_1 (List[Str]):           First feature db as a list of strings
             - db_2 (List[Str]):           Second feature db as a list of strings
+            - db_3 (List[Str]):           Second feature db as a list of strings
             - comparisons (List[tuples]): List of tuples to append comparison and pic name to
         '''
-        for i, (db_1_line, db_2_line) in enumerate(zip(db_1, db_2)):
+        for i, (db_1_line, db_2_line, db_3_line) in enumerate(zip(db_1, db_2, db_3)):
             # If the line is not a header, compare db features against
             # the query features.
             if i == 0:
                 continue
             else:
                 # Stripping and splitting the DB lines with regards to "|" seperator
-                db_1_line, db_2_line = db_1_line.strip().split("|"), db_2_line.strip().split("|")
+                db_1_line, db_2_line, db_3_line = db_1_line.strip().split("|"), db_2_line.strip().split("|"), db_3_line.strip().split("|")
                 
                 # Use eval function to parse from string to python object:
                 photo_name = db_1_line[1]
@@ -91,11 +95,12 @@ class reverse_img_searcher:
                     sift_features = eval("np.array(" + db_1_line[0] + ", dtype=np.float32)").reshape(self.sift_nr_descriptors, 128)
                     if db_2_line[0] != "None": pose_features = eval("np.array(" + db_2_line[0] + ")").reshape(33, 4)
                     else: pose_features = None
+                    cnn_features = eval("np.array(" + db_3_line[0] + ")")
                 except (ValueError):
-                    #print(db_2_line[1])//TODO: DEBUG
+                    print(f"Photo: {os.path.basename(db_1_line[1])}, gave ValueError, continuing!")
                     continue
                 # Compare to DB:
-                comparisons.append((self.photo_feature_extractor.compare([sift_features, pose_features]), photo_name))
+                comparisons.append((self.photo_feature_extractor.compare([sift_features, pose_features, cnn_features]), photo_name))
                 
 
     def _read_dbs(self):
@@ -104,4 +109,6 @@ class reverse_img_searcher:
             db_1 = db_1.readlines()
         with open("./feature_db/Pose_estimator_features.csv", "r") as db_2:
             db_2 = db_2.readlines()
-        return db_1, db_2
+        with open("./feature_db/CNN_features.csv", "r") as db_3:
+            db_3 = db_3.readlines()
+        return db_1, db_2, db_3

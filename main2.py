@@ -12,7 +12,7 @@ for subdir in subdirectories:
 from reverse_img_searcher import reverse_img_searcher
 
 # Native grid search
-weights = np.arange(start=0.1, step=0.1, stop=1)
+# weights = np.arange(start=0.1, step=0.1, stop=1)
 
 # for x in weights:
 #     for y in weights[1:len(weights)]:
@@ -22,5 +22,12 @@ weights = np.arange(start=0.1, step=0.1, stop=1)
 #             print(f"Pic: {name}, {float(acc):.2f}")
 #         print("################################\n\n")
 
-rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=1, pose_w=3)
+
+rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=1, pose_w=0, cnn_w=0)
+print(rev.search())
+
+rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=0, pose_w=1, cnn_w=0)
+print(rev.search())
+
+rev = reverse_img_searcher("./archive/brage_test/pushup2_brage.jpeg", sift_w=0, pose_w=0, cnn_w=1)
 print(rev.search())

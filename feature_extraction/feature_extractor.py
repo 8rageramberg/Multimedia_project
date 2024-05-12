@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from extractors.pose_estimator import pose_estimator
 from extractors.sift_desc_detector import sift_desc_detector
+from extractors.cnn import cnn
 
 
 class feature_extractor:
@@ -49,6 +50,7 @@ class feature_extractor:
         # TODO: For every feature added to list of feature extractors
         self.list_of_extractors.append(sift_desc_detector(photo_path, nr_descriptors=sift_nr_descriptors))
         self.list_of_extractors.append(pose_estimator(photo_path))
+        self.list_of_extractors.append(cnn(photo_path))
 
 
 
@@ -80,11 +82,9 @@ class feature_extractor:
         list_of_compare_outputs = [extractor.compare(features) for extractor, features in zip(self.list_of_extractors, features_to_compare)]
 
         # Return the compare outputs as a sum
-        compare_output = (self.sift_weight * list_of_compare_outputs[0]) + (self.pose_weight * list_of_compare_outputs[1])
-        try: compare_output = (compare_output / (self.sift_weight+self.pose_weight))
+        compare_output = (self.sift_weight * list_of_compare_outputs[0]) + (self.pose_weight * list_of_compare_outputs[1]) + (self.cnn_weight * list_of_compare_outputs[2])
+        try: compare_output = (compare_output / (self.sift_weight+self.pose_weight+self.cnn_weight))
         except(ZeroDivisionError): compare_output = 0
-
-        # TODO: NORMALIZE ON SCALE FROM 0 - 100
 
         return compare_output
 
@@ -95,6 +95,8 @@ class feature_extractor:
         Main function used for extracting the features of DB Images and saving
         them to the corresponding DB.
         '''
+        #import time as t
+        #start = t.time()
         # Extract features and save to DB:
         list_of_features = self.extract()
         for i, extractor in enumerate(self.list_of_extractors):
@@ -104,6 +106,7 @@ class feature_extractor:
             # Check that we arent trunctuating the np.array:
             if (i == 0): curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf, separator=",", precision=2)
             elif (i == 1) and (curr_features is not None): curr_features = np.array2string(curr_features.flatten(), threshold=np.inf, max_line_width=np.inf, separator=",")#, precision=4)
+            elif (i == 2): curr_features = np.array2string(curr_features, threshold=np.inf, max_line_width=np.inf, separator=",", precision=4)
             else: curr_features = "None"
 
             # Creating a pandas dataframe
@@ -116,6 +119,8 @@ class feature_extractor:
             mode = "a" if file_exists else "w"  
             header = False if file_exists else True
             df.to_csv(save_path, sep="|", mode=mode, header=header, index=False)
+        #stop = t.time()
+        #print(f"Total time 1 feature: {stop-start} seconds")
 
 
 
@@ -129,3 +134,11 @@ class feature_extractor:
     '''Getter function for getting photo path'''
     def get_photo_path(self):
         return self.photo_path
+    
+
+
+
+# TESTING:
+photo_path = "/Users/tobiashusebo/Desktop/UIB_Datasci/Sjette_semester/FAG/COMP4425/PROJECT/PROJECT_FINAL/Multimedia_project/archive/brage_test/pushup1_brage.jpeg"
+tester = feature_extractor(photo_path)
+tester.extractAndSave()

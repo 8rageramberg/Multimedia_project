@@ -1,2 +1,5 @@
 # No .DS_Store files when pushing
 .DS_Store
+CNN_features.csv
+Pose_estimator_features.csv
+SIFT_descriptor_detector_features.csv
