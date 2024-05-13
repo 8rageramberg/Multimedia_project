@@ -10,17 +10,21 @@ class sift_desc_detector:
     and returns the as a list of vectors.
 
     Attributes:
-        - photo_path (Str): path of current photo
+        - name (Str):               Str representation of the extractors name.
+        - photo_path (Str):         Path to the current photo used by extractor.
+        - features (np.ndarray):    Own features (descriptors) retrieved.
+        - good_match_ratio (float): Float representing which ratio is a good KNNmatch.
+        - nr_descriptors (Int):     Integer representing the nr of descs to retrieve.
 
     Functions:
         - get_features(n_descriptors):     A function for calculating the sift descriptors of the
                                            specified image. Returns a number of descriptors based on
                                            the param set at utilization. Default = 50.
-
         - compare(descriptors_to_compare): A function for comparing the features of the current
                                            image to features given as a parameter.
+        - get_name():                      Retrieves the name of the extractors. 
+        - set_new_photo():                 Sets a new photo to the extractor.
     '''
-
     name = "SIFT_descriptor_detector"
     photo_path = None
     nr_descriptors = None 
@@ -31,7 +35,6 @@ class sift_desc_detector:
         self.photo_path = photo_path
         self.nr_descriptors = nr_descriptors
         self.good_match_ratio = good_match_ratio
-        
         
 
     def get_features(self):

@@ -33,22 +33,23 @@ class pose_estimator:
     input image and features to retrieve this and compare. 
 
     Attributes:
-        - photo_path (Str): Path of current photo
-        - model_path (Str)
+        - name (Str):                 Str representation of the extractors name.
+        - photo_path (Str):           Path to the current photo used by extractor.
+        - own_keypoints (np.ndarray): Own keypoints retrieved.
 
     Functions:
-        - get_features(): Retrieve the pose features
-
-        - compare(): Compare to poses against eachother
-                    and retrieve a mean similarity score.
+        - get_features():  Retrieve the pose features of the current photo.
+        - compare():       Compare to poses against eachother and retrieve a mean similarity
+                           score.
+        - get_name():      Retrieves the name of the extractors. 
+        - set_new_photo(): Sets a new photo to the extractor.
 
     '''
     name = "Pose_estimator"
     photo_path = None
     own_keypoints = None
     
-    def __init__(self, photo_path="", model_path = 'pose_landmarker_heavy'):
-        self.model_path = model_path
+    def __init__(self, photo_path=""):
         self.photo_path = photo_path
 
         self.mp_pose = mp.solutions.pose
@@ -61,10 +62,8 @@ class pose_estimator:
             min_detection_confidence=0.5,   # Minimum confidence for pose detection for "success"
             min_tracking_confidence=0.5     # Minimum confidence for pose tracking to be "success"
         )
-
         self.scaler = MinMaxScaler(feature_range=(0, 1))
     
-
 
     def get_features(self, display=False):
         '''
@@ -115,16 +114,17 @@ class pose_estimator:
             #print("Something wrong with landmarks, features not retrieved")
             return None
 
+
     def compare(self, keypoints_to_compare):
         '''
-        Function for comparing own keypoints agains other keypoint lists
+        Function for comparing own keypoints agains other keypoint list
 
         Parameters:
             - keypoints_to_compare (List[keypoint]): List of keypoints to compare against
-                                                          it's own.
+                                                     it's own.
 
         Returns:
-            - mean_similarity_score (Float[0-100]):       A mean similarity score float
+            - mean_similarity_score (Float[0-100]):   A mean similarity score float
         '''
         # Error handeling, if landmarks on image did not exist None is returned,
         # if None, there is a 0% match
@@ -146,6 +146,7 @@ class pose_estimator:
         #similarity_scores = 100 - scaled_dist
         return mean_similarity_score
     
+
 
     def get_name(self):
         '''Getter function for getting extractor name'''

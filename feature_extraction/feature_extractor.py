@@ -14,19 +14,18 @@ class feature_extractor:
     Attributes:
         - photo_path (Str): path of current photo
         - list_of_extractor (List[extractors]): List of all extractors
+        - pose, sift, cnn_weight (float): A float weighing the different
+                                          extractors
 
     Functions:
         - extract():                 Function for extracting each feature of an image
                                      utilizing all extractors.
-        
         - compare():                 Function for comparing query image to a specific
                                      image given.
-
         - extractAndSave():          Function for extracting and saving DB Images
-
         - set_photo_path(new_path):  Function for setting the photo_path
-
         - get_photo_path():          Function for retrieving the photo_path
+        - get_names():               Function for retrieving names of extractors
     '''
     # Class variables for storing photo path, feature_extractors
     # and all extractors in a list for future use.
@@ -36,7 +35,6 @@ class feature_extractor:
     pose_weight = None
     sift_weight = None
     cnn_weight = None
-
 
     # Initiate the feature extractor
     def __init__(self, photo_path="", sift_nr_descriptors=50, sift_weight=0.2, pose_weight=0.3, cnn_weight=0.4):
@@ -55,7 +53,6 @@ class feature_extractor:
         self.list_of_extractors.append(cnn(photo_path))
 
 
-
     def extract(self):
         '''
         Main function for calculating features. Only used for QUERY IMAGE. Also called
@@ -66,7 +63,6 @@ class feature_extractor:
         '''
         # Extract features and return
         return [extractor.get_features() for extractor in self.list_of_extractors]
-
 
 
     def compare(self, features_to_compare):
@@ -132,11 +128,9 @@ class feature_extractor:
         self.photo_path = new_path
         _ = [ex.set_new_photo(new_path) for ex in self.list_of_extractors]
 
-
     def get_photo_path(self):
         '''Getter function for getting photo path'''
         return self.photo_path
-    
 
     def get_names(self):
         '''Getter function for getting feature names'''
