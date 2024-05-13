@@ -2,8 +2,20 @@
 
 # Imports
 import os
+import shutil
 from flask import Flask, jsonify, render_template, request
-from reverse_img_searcher import reverse_img_searcher
+
+##### IMPORT FIX: #####
+import os
+import numpy as np
+import sys
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+subdirectories = next(os.walk(current_dir))[1]
+for subdir in subdirectories:
+    sys.path.append(os.path.join(current_dir, subdir))
+from reverse_img_searcher_pickle import reverse_img_searcher_pickle as rev_search
+
 
 
 
@@ -41,7 +53,7 @@ def _delete_img():
             if file.startswith('uploaded_img'):
                 os.remove(os.path.join(directory, file))
 
-@app.route('/start_algo', methods=['POST'])
+@app.route('/start_algo', methods=['GET'])
 def find_match():
     directory = 'static'
     if os.path.exists(directory):
@@ -49,19 +61,28 @@ def find_match():
         for file in files:
              if file.startswith('uploaded_img'):
                 path = os.path.join(directory, file)
-                rev = reverse_img_searcher(path, sift_w=1, pose_w=0, cnn_w=0)
+                rev = rev_search(path, sift_w=0, pose_w=1, cnn_w=0)
                 result = rev.search()
+                
     else:
-        return print("There is something wrong, file was not found")
+        return jsonify(error="No matching image found")
     
     values = []
     paths = []
 
+    shit = "archive/push_up"
     for comparison in result:
         comparison_value, photo_name = comparison
         values.append(comparison_value)
-        paths.append(photo_name)
+        archived_img_path = os.path.join(shit, photo_name)
+        paths.append(archived_img_path)
 
+            # Copy the matched image to the 'static' directory with a new name
+        filename = f"img{len(paths)-1}.jpg"  # New filename for the copied image
+        save_path = os.path.join(directory, filename)
+        shutil.copyfile(archived_img_path, save_path)
+
+        
     return jsonify(values=values, paths=paths)
 
   
