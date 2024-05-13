@@ -140,7 +140,7 @@ class FeatureWeightOptimizer:
         """
         # Initialize weights
         list_of_extractors = ["pose_estimator", "SIFT_descriptor_detector", "CNN"]
-        weights = (1, 1, 1)        
+        weights = [1, 1, 1]    
         
         best_accuracy = 0
         best_weights = weights.copy()
@@ -149,7 +149,7 @@ class FeatureWeightOptimizer:
 
         # Generate new weights combinations
         for _ in range(100):  # Perform 100 random adjustments
-            test_weights = (np.random.rand() for k in weights)
+            test_weights = [np.random.rand() for k in weights]
             
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
