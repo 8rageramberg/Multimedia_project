@@ -59,7 +59,7 @@ class FeatureWeightOptimizer:
         row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature'].iloc[0]  # Remove brackets and split into numbers
+        features_1 = row_1['Feature'].iloc[0]  
         features_2 = row_2['Feature'].iloc[0]
 
         # Convert feature vectors to numeric format
@@ -188,15 +188,19 @@ class FeatureWeightOptimizer:
 
             image_files = []
             archive_path = 'archive'
-            for subdir, dirs, files in os.walk(archive_path):                
+            for subdir, dirs, files in os.walk(archive_path):                     
+                if 'Test_plank' in dirs:
+                    dirs.remove('Test_plank')      
+                if 'Test_plank' in dirs:
+                    dirs.remove('Test_pullup') 
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
+                        if "DS_Store" in full_path:
+                            continue
                         image_files.append(full_path)
-            random_subset = random.sample(image_files, 100)
-            print('Random subset:')
-            for i in random_subset:
-                print(i)
+            random_subset = random.sample(image_files, 100)           
+            
             print(Fore.GREEN + 'created path sets' + Fore.RESET)
 
             for first_path in random_subset:
