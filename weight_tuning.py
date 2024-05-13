@@ -186,7 +186,8 @@ class FeatureWeightOptimizer:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
                         image_files.append(full_path)
-            for first_path in image_files:
+            random_subset = np.random.choice(image_files, 100, replace=False)
+            for first_path in random_subset:
                 closest_image = ""
                 best_score = float('-inf')
                 for other_path in image_files:
