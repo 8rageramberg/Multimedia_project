@@ -1,11 +1,10 @@
-# Imports
+##### IMPORTS: #####
 import os
 import shutil
 from flask import Flask, jsonify, render_template, request
 import os
 import numpy as np
 import sys
-
 current_dir = os.path.dirname(os.path.realpath(__file__))
 subdirectories = next(os.walk(current_dir))[1]
 for subdir in subdirectories:
@@ -35,14 +34,17 @@ def append_static_files(result, directory):
         
         shutil.copyfile(name, save_path)
 
-    keyword = find_exercise(paths)
+    keyword, keyword_str = find_exercise(paths)
     video = find_video(keyword)
-    return values, paths, keyword, video
+    return values, paths, keyword_str, video
+
 
 def find_exercise(paths):
     parts = paths[0].rsplit('/', 2)
     keyword = parts[-2]
-    return keyword
+    keyword_str = " ".join(keyword.split("_"))
+    return keyword, keyword_str.upper()
+
 
 def find_video(keyword):
     with open('./static/youtube.txt', 'r') as file:
@@ -50,16 +52,16 @@ def find_video(keyword):
             excercise, url = row.strip().split(', ')
             if excercise == keyword:
                 return url  
-    return None  
+    return None
 
 
-##### RUN TO START APPLICATION: #####
-# Local server init w/ flask:
+
+##### FLASK FUNCS: #####
 app = Flask(__name__, static_url_path='/static')
 @app.route('/')
-
 def index():
     return render_template('index.html')
+
 
 @app.route('/save_image', methods=['POST'])
 def save_image():
@@ -74,6 +76,7 @@ def save_image():
 
     return 'No image uploaded.', 400
 
+
 def _delete_img(): 
     directory = 'static'
     # Check if the directory exists
@@ -86,6 +89,7 @@ def _delete_img():
             if file.startswith('uploaded_img') or file.startswith('img'):
                 os.remove(os.path.join(directory, file))
 
+
 @app.route('/start_algo', methods=['GET'])
 def find_match():
     directory = 'static'
@@ -94,7 +98,7 @@ def find_match():
         for file in files:
              if file.startswith('uploaded_img'):
                 path = os.path.join(directory, file)
-                rev = rev_search(path, sift_w=0, pose_w=1, cnn_w=0)
+                rev = rev_search(path, sift_w=0, pose_w=0.6, cnn_w=1)
                 result = rev.search()
     else:
         return jsonify(error="No matching image found")
@@ -102,6 +106,9 @@ def find_match():
     values, paths, keyword, video = append_static_files(result, directory)
     return jsonify(values=values, paths=paths, keyword=keyword, video=video)
 
+
+
+##### RUN TO START APPLICATION: #####
 def run_app():
     app.run(port=8000, debug=True) # If needed you can change port here
 

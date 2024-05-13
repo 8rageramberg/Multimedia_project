@@ -34,6 +34,14 @@ p {
     border-radius: 50px;
 }
 
+.card #search {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 30px;
+    text-align: center;
+    line-height: 10px;
+}
+
 .container .card img {
     width: 200px;
     height: 200px;
