@@ -1,4 +1,3 @@
-
 barbell_biceps_curl, https://www.youtube.com/embed/QZEqB6wUPxQ
 bench_press, https://www.youtube.com/embed/4Y2ZdHCOXok
 chest_fly_machine, https://www.youtube.com/embed/eGjt4lk6g34

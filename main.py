@@ -35,8 +35,22 @@ def append_static_files(result, directory):
         
         shutil.copyfile(name, save_path)
 
-    return values, paths
+    keyword = find_exercise(paths)
+    video = find_video(keyword)
+    return values, paths, keyword, video
 
+def find_exercise(paths):
+    parts = paths[0].rsplit('/', 2)
+    keyword = parts[-2]
+    return keyword
+
+def find_video(keyword):
+    with open('./static/youtube.txt', 'r') as file:
+        for row in file:
+            excercise, url = row.strip().split(', ')
+            if excercise == keyword:
+                return url  
+    return None  
 
 
 ##### RUN TO START APPLICATION: #####
@@ -69,7 +83,7 @@ def _delete_img():
     
         # Iterate over the files and delete those with names starting with 'uploaded_image'
         for file in files:
-            if file.startswith('uploaded_img'):
+            if file.startswith('uploaded_img') or file.startswith('img'):
                 os.remove(os.path.join(directory, file))
 
 @app.route('/start_algo', methods=['GET'])
@@ -85,8 +99,8 @@ def find_match():
     else:
         return jsonify(error="No matching image found")
     
-    values, paths = append_static_files(result, directory)
-    return jsonify(values=values, paths=paths)
+    values, paths, keyword, video = append_static_files(result, directory)
+    return jsonify(values=values, paths=paths, keyword=keyword, video=video)
 
 def run_app():
     app.run(port=8000, debug=True) # If needed you can change port here
