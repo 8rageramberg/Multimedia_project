@@ -64,18 +64,18 @@ NB: If you're having trouble cloning the repositroy refer to [githubs](https://d
 
 To use our application, open up the cloned repository in your editor of choice. Afterwards, navigate yourself to the `main.py` file, which should be located at the root level of the repository:
 
-![README_IMG_1](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img1.jpeg?raw=true)
+![README_IMG_1](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img1.png)
 
 Afterwards, run the repository and open a new browser and type in `http://127.0.0.1:8000`
 
-![README_IMG_2](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img2.jpeg?raw=true)
+![README_IMG_2](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img2.png)
 
 (or alternatively go to the terminal in your editor and do the following:)
 - MAC: `CMD` + `left click` the link in the terminal
 - Windows / Linux: `CTRL` + `left click` the link in the terminal
 
-![README_IMG_3](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img3.jpeg?raw=true)
+![README_IMG_3](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img3.png)
 
 Now the application should have started and you should be shown the following webpage:
 
-![README_IMG_4](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img4.jpeg?raw=true)
+![README_IMG_4](https://github.com/8rageramberg/Multimedia_project/blob/main/readme_imgs/readme_img4.png)
