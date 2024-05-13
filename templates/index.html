@@ -7,79 +7,117 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>DOMAIN SPECIFIC VIDEO RETRIEVAL FOR STRENGTH, HYPERTROPHY AND CONDITIONING</title>
 
-  <script>
-    let placeHolder = document.getElementById("placeHolder")
-    let inputImg = document.getElementById("input")
-
-    inputImg.onchange = function () {
-      let img = inputImg.files[0]
-      placeHolder.src = URL.createObjectURL(img);
-
-      let form = new FormData();
-      form.append("uploaded_img", img, 'uploaded_img.${fileExtension}');
-
-      fetch('/save_image', {
-        method: 'POST',
-        body: form
-      }).then(response => {
-        if (response.ok) {
-          console.log('Image uploaded successfully.');
-        } else {
-          console.error('Error uploading image.');
-        }
-      }).catch(error => {
-        console.error('Error:', error);
-      });
-    };
-  </script>
 </head>
 
 <body>
   <div>
-  <div class="container">
-    <div class="card">
-      <h1>What exercise am I doing?</h1>
-      <p>Version 1.0.0</p>
-      <img src='static/img.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
-      <label for="input"> Upload image</label>
-      <input type="file" accept="image/jpg image/jpeg" id="input">
-    </div>
-  </div>
-
-  <div class="container_2">
-    <h1>Your exercise looks like:</h1>
-    <div class="five_card">
-      <div class="img_card">
-        <img src="static/img.jpg" alt="Image 1">
-        <p type="score1">Description 1</p>
-      </div>
-      <div class="img_card">
-        <img src="static/img.jpg" alt="Image 2">
-        <p type="score1">Description 2</p>
-      </div>
-      <div class="img_card">
-        <img src="static/img.jpg" alt="Image 3">
-        <p type="score1">Description 3</p>
-      </div>
-      <div class="img_card">
-        <img src="static/img.jpg" alt="Image 4">
-        <p type="score1">Description 4</p>
-      </div>
-      <div class="img_card">
-        <img src="static/img.jpg" alt="Image 5">
-        <p type="score1">Description 5</p>
+    <div class="container">
+      <div class="card">
+        <h1>What exercise am I doing?</h1>
+        <p>Version 1.0.0</p>
+        <img src='static/img.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
+        <form action="/start_algo" method="GET" onsubmit="startAlgo(event)">
+          <label for="input" , style="display: none;"> Upload image</label>
+          <input type="file" accept="image/jpg image/jpeg" id="input">
+          <div id="loading-message"></div>
+        </form>
       </div>
     </div>
-  </div>
 
-  <div class="container_3">
-    <h2>We think you are doing:</h2>
-    <h1>THIS EXERCISE</h1>
-    <img src="static/img.jpg" type="VIDEO" style=>
-  </div>
-  
+    <div class="container_2">
+      <h1>Your exercise looks like:</h1>
+      <div class="five_card">
+        <div class="img_card">
+          <img src="static/img.jpg" id="Image 1">
+          <p type="scores">Description 1</p>
+        </div>
+        <div class="img_card">
+          <img src="static/img.jpg" alt="Image 2">
+          <p type="scores">Description 2</p>
+        </div>
+        <div class="img_card">
+          <img src="static/img.jpg" alt="Image 3">
+          <p type="scores">Description 3</p>
+        </div>
+        <div class="img_card">
+          <img src="static/img.jpg" alt="Image 4">
+          <p type="scores">Description 4</p>
+        </div>
+        <div class="img_card">
+          <img src="static/img.jpg" alt="Image 5">
+          <p type="scores">Description 5</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container_3">
+      <h2>We think you are doing:</h2>
+      <h1>THIS EXERCISE</h1>
+      <img src="static/img.jpg" type="VIDEO" style=>
+    </div>
+
 
 
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  let placeHolder = document.getElementById("placeHolder")
+  let inputImg = document.getElementById("input")
+
+  function updateImgs(data) {
+    let imgs = document.querySelectorAll('.img_card img'); // Select all img elements within .img_card
+    let scores = document.querySelectorAll('.img_card p')
+
+    imgs.forEach((img, index) => {
+      if (data.paths[index]) {
+        let imagePath = `static/img${index}.jpg`; // Construct the image path
+        img.src = imagePath; // Update src attribute with the constructed image path
+      }
+    });
+    scores.forEach((score, index) => {
+      if (data.values[index]) {
+        scores[index].innerText = `${parseFloat(data.values[index]).toFixed(2)}%`;
+      }
+    });
+  };
+
+  inputImg.onchange = function () {
+    let img = inputImg.files[0];
+    placeHolder.src = URL.createObjectURL(img);
+
+    let form = new FormData();
+    form.append("uploaded_img", img, img.name);
+
+    fetch('/save_image', {
+      method: 'POST',
+      body: form  // Send the image data in the request body
+    }).then(response => {
+      if (response.ok) {
+        console.log('Image uploaded successfully.');
+        // After uploading the image, trigger the algorithm search
+        fetch('/start_algo', {
+          method: 'GET'
+        }).then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Error fetching data.');
+          }
+        }).then(data => {
+          updateImgs(data);
+        }).catch(error => {
+          console.error('Error:', error);
+        });
+      } else {
+        console.error('Error uploading image.');
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
+
+</script>
 
 </html>
