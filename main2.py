@@ -23,5 +23,5 @@ for root, _, files in os.walk(directory):
                 if ".DS_Store" in absolute_file_path:
                     continue
 
-                rev = rev_search(absolute_file_path, sift_w=0, pose_w=0.07, cnn_w=1)
+                rev = rev_search(absolute_file_path, sift_w=0, pose_w=0.6, cnn_w=1)
                 print(rev.search())
