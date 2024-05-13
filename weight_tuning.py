@@ -192,6 +192,7 @@ class FeatureWeightOptimizer:
             print('Random subset:')
             for i in random_subset:
                 print(i)
+            print(Fore.GREEN + 'created path sets' + Fore.RESET)
 
             for first_path in random_subset: #wtf
                 closest_image = ""
