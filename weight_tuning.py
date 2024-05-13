@@ -196,7 +196,7 @@ class FeatureWeightOptimizer:
                 best_score = float('-inf')
                 for other_path in image_files:
                     if other_path != first_path:  # Exclude the image itself
-                        score = self.calculate_score(first_path, other_path, test_weights[0], test_weights[1], test_weights[2])
+                        score = self.calculate_score(os.path.basename(first_path), os.path.basename(other_path), test_weights[0], test_weights[1], test_weights[2])
                         if score > best_score:
                             best_score = score
                             closest_image = other_path                  
