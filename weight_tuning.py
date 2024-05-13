@@ -33,7 +33,7 @@ class FeatureWeightOptimizer:
         
         return db_1, db_2, db_3
     
-   
+
         
     
     def calculate_score(self, path_1, path_2, w1, w2, w3, db_1, db_2, db_3):
@@ -190,6 +190,8 @@ class FeatureWeightOptimizer:
                     dirs.remove('Test_plank')      
                 if 'Test_plank' in dirs:
                     dirs.remove('Test_pullup') 
+                if 'tester_imgs' in dirs:
+                    dirs.remove('tester_imgs')                     
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
