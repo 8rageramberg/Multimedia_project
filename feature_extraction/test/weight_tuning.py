@@ -153,38 +153,34 @@ class FeatureWeightOptimizer:
             
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
-            
-            #iterate over all images, call compare function and accuracy_count += 1 if classified correctly
-            archive_path = os.path.join('..', '..', 'archive')  # Go up one level and then to the archive folder
+
+            #new iteration
+            image_files = []
+            archive_path = 'archive'
             for subdir, dirs, files in os.walk(archive_path):
                 for file in files:
-                    if file.lower().endswith(('.png', '.jpg', '.jpeg')):  # Check for image files
-                        relative_path = os.path.join('archive', os.path.relpath(os.path.join(subdir, file), archive_path))  # Get relative path
-                        # TODO: find closest image among the other image, i.e. exclude the image itself in the comparison
-                        closest_image = ""
-                        best_score = float('-inf')
-                        for other_subdir, other_dirs, other_files in os.walk(archive_path):
-                            for other_file in other_files:
-                                if other_file.lower().endswith(('.png', '.jpg', '.jpeg')):  # Check for image files
-                                    other_relative_path = os.path.join('archive', os.path.relpath(os.path.join(other_subdir, other_file), archive_path))
-                                    if other_relative_path != relative_path:  # Exclude the image itself
-                                        # TODO: Calculate score between images                                        
-                                        score = self.calculate_score(relative_path, other_relative_path, test_weights[0], test_weights[1], test_weights[2])
-                                        if score > best_score:
-                                            best_score = score
-                                            closest_image = other_relative_path
-
-                        if closest_image != "":
-                            # Check if closest image is in the same subdir
-                            if self.extract_subfolder(closest_image) == self.extract_subfolder(relative_path):
-                                accuracy_count += 1
+                    if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                        full_path = os.path.join(subdir, file)
+                        image_files.append(full_path)
+            for first_path in image_files:
+                closest_image = ""
+                best_score = float('-inf')
+                for other_path in image_files:
+                    if other_path != first_path:  # Exclude the image itself
+                        score = self.calculate_score(first_path, other_path, test_weights[0], test_weights[1], test_weights[2])
+                        if score > best_score:
+                            best_score = score
+                            closest_image = other_path                  
+                if closest_image != "":
+                    # Check if closest image is in the same subdir
+                    if self.extract_subfolder(closest_image) == self.extract_subfolder(first_path):
+                        accuracy_count += 1
                                 
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
                 best_weights = test_weights.copy()       
-        
-        print('best_weights are ' + str(best_weights))
-        
+
+        print('best_weights are ' + str(best_weights))        
         return best_weights
     
 if __name__ == "__main__":
