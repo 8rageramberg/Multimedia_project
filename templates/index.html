@@ -11,12 +11,14 @@
 
 <body>
   <div>
+
+    <!-- First card -->
     <div class="container">
       <div class="card">
         <h1>What exercise am I doing?</h1>
         <p>Version 1.0.0</p>
         <p style="margin-top: 20px;"><b>Upload image:</b></p>
-        <img src='static/image.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
+        <img src='static/image.jpg' onclick="document.getElementById('input').click();" id="placeholder">
         <form action="/start_algo" method="GET">
           <input type="file" accept="image/jpg image/jpeg" id="input">
           <div id="loading-message"></div>
@@ -25,6 +27,7 @@
       </div>
     </div>
 
+    <!-- Second card -->
     <div class="container_2">
       <h1>Your exercise looks like:</h1>
       <div class="five_card">
@@ -51,6 +54,7 @@
       </div>
     </div>
 
+    <!-- Third card -->
     <div class="container_3">
       <h2>We think you are doing:</h2>
       <h1 id="exercise">THIS EXERCISE</h1>
@@ -58,67 +62,64 @@
     </div>
 </body>
 
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-  let placeHolder = document.getElementById("placeHolder")
-  let inputImg = document.getElementById("input")
-  let search_button = document.getElementById("search")
+  let placeholder = document.getElementById("placeholder")  // Old placeholder Input Image
+  let inputImg = document.getElementById("input")           // Uploaded Image
+  let search_button = document.getElementById("search")     // Seach button
 
   function updateImgs(data) {
-    let imgs = document.querySelectorAll('.img_card img'); // Select all img elements within .img_card
-    let scores = document.querySelectorAll('.img_card p')
+    let imgs = document.querySelectorAll('.img_card img');  // Select all img elements within .img_card
+    let scores = document.querySelectorAll('.img_card p')   // Scores are the returned similaity score
 
-    imgs.forEach((img, index) => {
-      if (data.paths[index]) {
-        let identifier = new Date().getTime();
-        let imagePath = `static/img${index}.jpg?${identifier}`; // Construct the image path
-        img.src = imagePath; // Update src attribute with the constructed image path
+    imgs.forEach((img, index) => {                          // Loop images on index to update the 5 images
+      if (data.paths[index]) {                              
+        let identifier = new Date().getTime();                  // Timestamp identifier to differenciate between two inputs in same session
+        let imagePath = `static/img${index}.jpg?${identifier}`; // Construct image path
+        img.src = imagePath;                                    // Update src attribute
       }
     });
-    scores.forEach((score, index) => {
+    scores.forEach((score, index) => {                      // Updates the scores per image
       if (data.values[index]) {
-        scores[index].innerText = `${parseFloat(data.values[index]).toFixed(2)}%`;
+        scores[index].innerText = `${parseFloat(data.values[index]).toFixed(2)}%`; // Fix the score to two decimals
       }
     });
   };
 
-  function updateTag(data) {
+  function updateTag(data) {                          // Update tag, tag is the "title" where the type of exercise is shown
     exercise = document.getElementById('exercise')
     exercise.innerText = data.keyword
   }
 
-  function updateVid(data) {
+  function updateVid(data) {                   // Update the video to a the exercise predicted
     video = document.getElementById('video')
     video.src = data.video
   }
 
-  function pageScroll() {
+  function pageScroll() {     // function for scrollign the page
     window.scrollBy(0,580);
   }
 
 
-  inputImg.onchange = function () {
+  inputImg.onchange = function () {   // When img is uploaded to the input, the new img displays
     let img = inputImg.files[0];
-    placeHolder.src = URL.createObjectURL(img);
+    placeholder.src = URL.createObjectURL(img);
   }
 
-  search_button.onclick = function () {
+  search_button.onclick = function () {     // Main function Algorithm starts. 
     let img = inputImg.files[0];
     let form = new FormData();
-    form.append("uploaded_img", img, img.name);
+    form.append("uploaded_img", img, img.name); // Append the input img
 
     pageScroll()
 
-    fetch('/save_image', {
+    fetch('/save_image', {  // fetch app route /save_image
       method: 'POST',
-      body: form  // Send the image data in the request body
+      body: form            
     }).then(response => {
       if (response.ok) {
         console.log('Image uploaded successfully.');
-        // After uploading the image, trigger the algorithm search
-        fetch('/start_algo', {
+    
+        fetch('/start_algo', {       // After uploading image, trigger algorithm search
           method: 'GET'
         }).then(response => {
           if (response.ok) {
@@ -127,7 +128,7 @@
             throw new Error('Error fetching data.');
           }
         }).then(data => {
-          updateTag(data)
+          updateTag(data)           // Update the site with new information
           updateVid(data)
           updateImgs(data);
         }).catch(error => {

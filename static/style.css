@@ -1,7 +1,6 @@
 * {
     box-sizing: border-box;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-
 }
 
 body {
@@ -77,10 +76,10 @@ p {
     border-radius: 5px;
     cursor: pointer;
     line-height: 40px;
-
 }
 
-.container button:hover, label:hover {
+.container button:hover,
+label:hover {
     background-color: rgb(103, 103, 185);
 }
 
@@ -90,13 +89,11 @@ p {
     border-style: solid;
     border-color: aliceblue;
     filter: brightness(50%);
-    /* Adjust brightness to control opacity */
 }
 
 input {
     display: none;
 }
-
 
 .container_2 {
     width: 100%;
@@ -135,7 +132,6 @@ input {
     align-self: center;
 }
 
-
 .container_3 {
     width: 100%;
     max-width: 1200px;
@@ -154,7 +150,7 @@ input {
 }
 
 iframe {
-    height: 800px;
-    width: 800px;
+    height: 400px;
+    width: 400px;
     border-radius: 50px;
 }
