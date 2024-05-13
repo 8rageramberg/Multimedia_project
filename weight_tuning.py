@@ -37,7 +37,6 @@ class FeatureWeightOptimizer:
         
     
     def calculate_score(self, path_1, path_2, w1, w2, w3, db_1, db_2, db_3):
-        print(Fore.BLUE + f'Calculating score between {path_1} and {path_2}' + Fore.RESET)
         """
 
         Calculate the score between two images.
