@@ -27,7 +27,8 @@ You need the following dependencies to run our application:
 - *Tensorflow*
 	- pip install tensorflow
  - *Pandas*
- 	- pip install pandas 
+ 	- pip install pandas
+  - (*Sklearn*)
 
 **Installation:**
 To install our application you can do the following steps:
