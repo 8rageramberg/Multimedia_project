@@ -25,7 +25,9 @@ You need the following dependencies to run our application:
  - *Keras*
    	- pip install keras
 - *Tensorflow*
-	- pip install tensorflow 
+	- pip install tensorflow
+ - *Pandas*
+ 	- pip install pandas 
 
 **Installation:**
 To install our application you can do the following steps:
