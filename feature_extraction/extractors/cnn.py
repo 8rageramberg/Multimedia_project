@@ -27,12 +27,9 @@ class cnn:
     photo_path = None
     features = None
 
-    def _init_(self, photo_path="", weights_path=""):
-        if not weights_path:
-            weights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5")
+    def __init__(self, photo_path=""):
         self.photo_path = photo_path
-        self.model = VGG16(weights=None, include_top=False)  # Load VGG16 without the classification layers
-        self.model.load_weights(weights_path)
+        self.model = VGG16(weights='imagenet', include_top=False)  # Load VGG16 without the classification layers
 
 
     def get_features(self):
