@@ -158,6 +158,7 @@ class FeatureWeightOptimizer:
             image_files = []
             archive_path = 'archive'
             for subdir, dirs, files in os.walk(archive_path):
+                print(subdir)
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
