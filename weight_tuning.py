@@ -1,11 +1,17 @@
+import tensorflow as tf
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input
 import numpy as np
 import sys
 import os
-import numpy as np
-import pandas as pd
-import pandas as pd
-from scipy.spatial.distance import euclidean
+
+import mediapipe as mp
 import cv2 as cv
+from sklearn.preprocessing import MinMaxScaler
+from scipy.spatial.distance import euclidean
+import pandas as pd
+
 sys.path.append("feature_db")
 
 class FeatureWeightOptimizer:
