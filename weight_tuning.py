@@ -139,8 +139,6 @@ class FeatureWeightOptimizer:
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
         # features_2 = [float(x) for x in features_2]
-        print(f'features_1: {features_1}')
-        print(f'features_2: {features_2}')
 
         # Calculate the CNN score3        
         distance = np.linalg.norm((features_1 - features_2))
@@ -201,7 +199,7 @@ class FeatureWeightOptimizer:
                 print(i)
             print(Fore.GREEN + 'created path sets' + Fore.RESET)
 
-            for first_path in random_subset: #wtf
+            for first_path in random_subset:
                 closest_image = ""
                 best_score = float('-inf')
                 for other_path in image_files:
