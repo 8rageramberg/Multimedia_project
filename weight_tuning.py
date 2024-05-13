@@ -6,6 +6,7 @@ import pandas as pd
 import pandas as pd
 from scipy.spatial.distance import euclidean
 import cv2 as cv
+sys.path.append("feature_db")
 
 class FeatureWeightOptimizer:
     """
@@ -157,8 +158,7 @@ class FeatureWeightOptimizer:
             #new iteration
             image_files = []
             archive_path = 'archive'
-            for subdir, dirs, files in os.walk(archive_path):
-                print(subdir)
+            for subdir, dirs, files in os.walk(archive_path):                
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
