@@ -62,6 +62,13 @@ class FeatureWeightOptimizer:
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
         # features_2 = [float(x) for x in features_2]
+        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
+        print(f'features_1: {features_1}')
+        print(f'features_2: {features_2}')
+        print(f'feature type is: {type(features_1)}')
+        print(f'filename1: {path_1}')
+        print(f'filename2: {path_2}')
+        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
 
         
         if features_1 is None or features_2 is None: 
