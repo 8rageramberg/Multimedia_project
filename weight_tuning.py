@@ -47,7 +47,7 @@ class FeatureWeightOptimizer:
         #compute pose estimator score1
         db_1, db_2, db_3 = self._read_dbs()
 
-        data = db_1
+        data = db_2
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['Filename'] == path_1]
@@ -80,8 +80,8 @@ class FeatureWeightOptimizer:
         #similarity_scores = 100 - scaled_dist
         score1 = mean_similarity_score 
 
-        #TODO: compute distance 2 and 3
-        data = db_2
+        
+        data = db_1
         # Search for the rows corresponding to the image paths
         row_1 = data[data['Filename'] == path_1]
         row_2 = data[data['Filename'] == path_2]
