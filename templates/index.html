@@ -15,13 +15,13 @@
       <div class="card">
         <h1>What exercise am I doing?</h1>
         <p>Version 1.0.0</p>
+        <p style="margin-top: 20px;"><b>Upload image:</b></p>
         <img src='static/image.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
-        <form action="/start_algo" method="GET" onsubmit="startAlgo(event)">
-          <label for="input" > Upload image</label>
-
+        <form action="/start_algo" method="GET">
           <input type="file" accept="image/jpg image/jpeg" id="input">
           <div id="loading-message"></div>
         </form>
+        <button id="search"><b>START SEARCH</b></button>
       </div>
     </div>
 
@@ -29,24 +29,24 @@
       <h1>Your exercise looks like:</h1>
       <div class="five_card">
         <div class="img_card">
-          <img src="static/image.jpg" id="Image 1">
-          <p type="scores">Description 1</p>
+          <img src="static/image_place_holder.jpg" id="Image 1">
+          <p type="scores"></p>
         </div>
         <div class="img_card">
-          <img src="static/image.jpg" alt="Image 2">
-          <p type="scores">Description 2</p>
+          <img src="static/image_place_holder.jpg" alt="Image 2">
+          <p type="scores"></p>
         </div>
         <div class="img_card">
-          <img src="static/image.jpg" alt="Image 3">
-          <p type="scores">Description 3</p>
+          <img src="static/image_place_holder.jpg" alt="Image 3">
+          <p type="scores"></p>
         </div>
         <div class="img_card">
-          <img src="static/image.jpg" alt="Image 4">
-          <p type="scores">Description 4</p>
+          <img src="static/image_place_holder.jpg" alt="Image 4">
+          <p type="scores"></p>
         </div>
         <div class="img_card">
-          <img src="static/image.jpg" alt="Image 5">
-          <p type="scores">Description 5</p>
+          <img src="static/image_place_holder.jpg" alt="Image 5">
+          <p type="scores"></p>
         </div>
       </div>
     </div>
@@ -56,15 +56,15 @@
       <h1 id="exercise">THIS EXERCISE</h1>
       <iframe src="" allowfullscreen="" frameborder="0" id="video"> </iframe>
     </div>
-
-
-
 </body>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
   let placeHolder = document.getElementById("placeHolder")
   let inputImg = document.getElementById("input")
+  let search_button = document.getElementById("search")
 
   function updateImgs(data) {
     let imgs = document.querySelectorAll('.img_card img'); // Select all img elements within .img_card
@@ -94,14 +94,22 @@
     video.src = data.video
   }
 
+  function pageScroll() {
+    window.scrollBy(0,580);
+  }
 
 
   inputImg.onchange = function () {
     let img = inputImg.files[0];
     placeHolder.src = URL.createObjectURL(img);
+  }
 
+  search_button.onclick = function () {
+    let img = inputImg.files[0];
     let form = new FormData();
     form.append("uploaded_img", img, img.name);
+
+    pageScroll()
 
     fetch('/save_image', {
       method: 'POST',
@@ -132,8 +140,5 @@
       console.error('Error:', error);
     });
   };
-
-
 </script>
-
 </html>
