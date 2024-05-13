@@ -173,6 +173,24 @@ class FeatureWeightOptimizer:
 
         db_1, db_2, db_3 = self._read_dbs()
 
+        image_files = []
+        archive_path = 'archive'
+        for subdir, dirs, files in os.walk(archive_path):  
+            if 'A_test_set' in dirs:
+                dirs.remove('A_test_set')                    
+            if 'Test_plank' in dirs:
+                dirs.remove('Test_plank')      
+            if 'Test_plank' in dirs:
+                dirs.remove('Test_pullup') 
+            if 'tester_imgs' in dirs:
+                dirs.remove('tester_imgs')                     
+            for file in files:
+                if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    full_path = os.path.join(subdir, file)
+                    if "DS_Store" in full_path:
+                        continue
+                    image_files.append(full_path)
+
         # Generate new weights combinations
         for _ in range(100):  # Perform 100 random adjustments
             test_weights = [np.random.rand() for k in weights]
@@ -183,23 +201,7 @@ class FeatureWeightOptimizer:
 
             #new iteration
 
-            image_files = []
-            archive_path = 'archive'
-            for subdir, dirs, files in os.walk(archive_path):  
-                if 'A_test_set' in dirs:
-                    dirs.remove('A_test_set')                    
-                if 'Test_plank' in dirs:
-                    dirs.remove('Test_plank')      
-                if 'Test_plank' in dirs:
-                    dirs.remove('Test_pullup') 
-                if 'tester_imgs' in dirs:
-                    dirs.remove('tester_imgs')                     
-                for file in files:
-                    if file.lower().endswith(('.png', '.jpg', '.jpeg')):
-                        full_path = os.path.join(subdir, file)
-                        if "DS_Store" in full_path:
-                            continue
-                        image_files.append(full_path)
+            
             random_subset = random.sample(image_files, 100)           
             
             print(Fore.GREEN + 'created path sets' + Fore.RESET)
