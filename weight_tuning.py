@@ -133,8 +133,8 @@ class FeatureWeightOptimizer:
         row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature']
-        features_2 = row_2['Feature']
+        features_1 = row_1['Feature'].iloc[0]
+        features_2 = row_2['Feature'].iloc[0]
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
