@@ -5,6 +5,7 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 import numpy as np
 import sys
 import os
+import random
 
 import mediapipe as mp
 import cv2 as cv
@@ -186,7 +187,7 @@ class FeatureWeightOptimizer:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                         full_path = os.path.join(subdir, file)
                         image_files.append(full_path)
-            random_subset = np.random.choice(image_files, 100, replace=False)
+            random_subset = random.sample(image_files, 100)
             for first_path in random_subset:
                 closest_image = ""
                 best_score = float('-inf')
