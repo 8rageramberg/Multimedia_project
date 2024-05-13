@@ -4,19 +4,17 @@ import os
 import numpy as np
 import pandas as pd
 import pandas as pd
-from scipy.spatial import distance
+from scipy.spatial.distance import euclidean
+import cv2 as cv
 
 class FeatureWeightOptimizer:
     """
     A class to optimize the weights of different features extracted by the feature_extractor.
     
-    Attributes:
-        feature_extractor (feature_extractor): The feature extractor instance with different feature extractors.
-        data (pd.DataFrame): DataFrame containing features and labels.
-        n_splits (int): Number of folds for cross-validation.
+    
     """
-    def __init__(self, feature_extractor):
-        self.feature_extractor = feature_extractor
+   
+        
     
     def calculate_score(self, path_1, path_2, w1, w2, w3):
         """
@@ -31,7 +29,7 @@ class FeatureWeightOptimizer:
         """
         #compute pose estimator score1
         
-        data = pd.read_csv("pose_estimator_features.pkl") 
+        data = pd.read_pickle("pose_estimator_features.pkl") 
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
@@ -51,7 +49,7 @@ class FeatureWeightOptimizer:
         
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
-        for kp1, kp2 in zip(keypoints1, keypoints2):
+        for kp1, kp2 in zip(features_1, features_2):
             euclidean_dist.append(euclidean(kp1, kp2))
 
         # Flip so lower distances is higher similarity, then scale the similarity
@@ -65,7 +63,7 @@ class FeatureWeightOptimizer:
         score1 = mean_similarity_score 
 
         #TODO: compute distance 2 and 3
-        data = pd.read_csv("SIFT_descriptor_detector_features.pkl") 
+        data = pd.read_pickle("SIFT_descriptor_detector_features.pkl") 
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
@@ -93,14 +91,15 @@ class FeatureWeightOptimizer:
 
         # Calculate metric:
         num_good_matches = len(good_matches)
+        nr_descriptors = 50 
         if num_good_matches == 0:
             score2 = 0
         else:
-            score2 = (num_good_matches / self.nr_descriptors) * 100
+            score2 = (num_good_matches / nr_descriptors) * 100
 
 
 
-        data = pd.read_csv("CNN_features.pkl")  # Replace 'your_data.csv' with your actual file name
+        data = pd.read_pickle("CNN_features.pkl")  # Replace 'your_data.csv' with your actual file name
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
@@ -115,7 +114,7 @@ class FeatureWeightOptimizer:
         # features_2 = [float(x) for x in features_2]
 
         # Calculate the CNN score3        
-        distance = np.linalg.norm((self.features - features_to_compare) / 2500 * 100)
+        distance = np.linalg.norm((features_1 - features_2))
         score3 =  100 - (distance / 5000) * 100
         
 
@@ -140,7 +139,8 @@ class FeatureWeightOptimizer:
             dict: Optimized weights for each feature extractor.
         """
         # Initialize weights
-        weights = {extractor.get_name(): 1.0 for extractor in self.feature_extractor.list_of_extractors}        
+        list_of_extractors = ["pose_estimator", "SIFT_descriptor_detector", "CNN"]
+        weights = (1, 1, 1)        
         
         best_accuracy = 0
         best_weights = weights.copy()
@@ -149,20 +149,20 @@ class FeatureWeightOptimizer:
 
         # Generate new weights combinations
         for _ in range(100):  # Perform 100 random adjustments
-            test_weights = {k: np.random.rand() for k in weights}
+            test_weights = (np.random.rand() for k in weights)
             
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
             
             #iterate over all images, call compare function and accuracy_count += 1 if classified correctly
-            archive_path = os.path.join(self.base_path, '..', 'archive')  # Go up one level and then to the archive folder
+            archive_path = os.path.join('..', 'archive')  # Go up one level and then to the archive folder
             for subdir, dirs, files in os.walk(archive_path):
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):  # Check for image files
                         relative_path = os.path.join('archive', os.path.relpath(os.path.join(subdir, file), archive_path))  # Get relative path
                         # TODO: find closest image among the other image, i.e. exclude the image itself in the comparison
                         closest_image = ""
-                        best_score = float('inf')
+                        best_score = float('-inf')
                         for other_subdir, other_dirs, other_files in os.walk(archive_path):
                             for other_file in other_files:
                                 if other_file.lower().endswith(('.png', '.jpg', '.jpeg')):  # Check for image files
@@ -186,3 +186,12 @@ class FeatureWeightOptimizer:
         print('best_weights are ' + str(best_weights))
         
         return best_weights
+    
+if __name__ == "__main__":
+    optimizer = FeatureWeightOptimizer()
+    
+    # Set the base path for the image archive
+    
+    # Optimize weights
+    optimized_weights = optimizer.optimize_weights()
+    print(optimized_weights)
