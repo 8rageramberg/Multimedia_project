@@ -14,6 +14,16 @@ class FeatureWeightOptimizer:
     
     
     """
+    def _read_dbs(self):
+        ''' Private function for reading the DB'''
+        pkl_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "feature_db")
+
+        db_1 = pd.read_pickle(os.path.join(pkl_path, "SIFT_descriptor_detector_features.pkl"))
+        db_2 = pd.read_pickle(os.path.join(pkl_path, "Pose_estimator_features.pkl"))
+        db_3 = pd.read_pickle(os.path.join(pkl_path, "CNN_features.pkl"))
+        
+        return db_1, db_2, db_3
+    
    
         
     
@@ -29,8 +39,9 @@ class FeatureWeightOptimizer:
             float: The score between the two images.
         """
         #compute pose estimator score1
-        
-        data = pd.read_pickle("pose_estimator_features.pkl") 
+        db_1, db_2, db_3 = self._read_dbs()
+
+        data = db_1
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
@@ -64,8 +75,7 @@ class FeatureWeightOptimizer:
         score1 = mean_similarity_score 
 
         #TODO: compute distance 2 and 3
-        data = pd.read_pickle("SIFT_descriptor_detector_features.pkl") 
-
+        data = db_2
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
         row_2 = data[data['photo_path'] == path_2]
@@ -100,7 +110,7 @@ class FeatureWeightOptimizer:
 
 
 
-        data = pd.read_pickle("CNN_features.pkl")  # Replace 'your_data.csv' with your actual file name
+        data = db_3
 
         # Search for the rows corresponding to the image paths
         row_1 = data[data['photo_path'] == path_1]
