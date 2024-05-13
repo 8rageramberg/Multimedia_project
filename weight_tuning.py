@@ -202,7 +202,7 @@ class FeatureWeightOptimizer:
             #new iteration
 
             
-            random_subset = random.sample(image_files, 5)          
+            random_subset = random.sample(image_files, 30)          
 
             for first_path in random_subset:
                 print(f'First path: {first_path}')
@@ -221,7 +221,8 @@ class FeatureWeightOptimizer:
             print(f'Accuracy count: {accuracy_count}')
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
-                best_weights = test_weights.copy()       
+                best_weights = test_weights.copy() 
+                print(f'current best weights are: {best_weights}')      
 
         print('best_weights are ' + str(best_weights))        
         return best_weights
