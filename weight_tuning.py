@@ -11,6 +11,8 @@ import cv2 as cv
 from sklearn.preprocessing import MinMaxScaler
 from scipy.spatial.distance import euclidean
 import pandas as pd
+import colorama
+from colorama import Fore
 
 sys.path.append("feature_db")
 
@@ -97,6 +99,7 @@ class FeatureWeightOptimizer:
         # Calculate the SIFT score2
         # Utilizing the cv2 libraries brute force matcher
         brute_force_matcher = cv.BFMatcher()
+        print(Fore.RED + "This is a red message!" + Fore.RESET)
         print("features are" + features_1 + features_2)
         matches = brute_force_matcher.knnMatch(features_1, features_2, 2)
 
