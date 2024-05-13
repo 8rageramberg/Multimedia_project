@@ -186,7 +186,9 @@ class FeatureWeightOptimizer:
 
             image_files = []
             archive_path = 'archive'
-            for subdir, dirs, files in os.walk(archive_path):                     
+            for subdir, dirs, files in os.walk(archive_path):  
+                if 'A_test_set' in dirs:
+                    dirs.remove('A_test_set')                    
                 if 'Test_plank' in dirs:
                     dirs.remove('Test_plank')      
                 if 'Test_plank' in dirs:
