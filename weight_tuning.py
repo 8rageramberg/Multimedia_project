@@ -180,6 +180,7 @@ class FeatureWeightOptimizer:
             accuracy_count = 0 
 
             #new iteration
+
             image_files = []
             archive_path = 'archive'
             for subdir, dirs, files in os.walk(archive_path):                
@@ -188,6 +189,10 @@ class FeatureWeightOptimizer:
                         full_path = os.path.join(subdir, file)
                         image_files.append(full_path)
             random_subset = random.sample(image_files, 100)
+            print('Random subset:')
+            for i in random_subset:
+                print(i)
+
             for first_path in random_subset: #wtf
                 closest_image = ""
                 best_score = float('-inf')
