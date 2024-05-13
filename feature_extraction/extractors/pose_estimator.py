@@ -20,9 +20,7 @@ logging.getLogger('mediapipe').setLevel(logging.ERROR)
 # See the License for the specific language governing permissions and
 # limitations under the License.
  
-# not sure if you need more than mediapipe, but keep in case
-# wget -O pose_landmarker.task -q https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
-# MAC: curl -o pose_landmarker.task -O https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task
+
 
 # https://github.com/google/mediapipe/blob/master/docs/solutions/pose.md
 
