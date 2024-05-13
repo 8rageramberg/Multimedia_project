@@ -62,13 +62,7 @@ class FeatureWeightOptimizer:
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
         # features_2 = [float(x) for x in features_2]
-        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
-        print(f'features_1: {str(features_1)}')
-        print(f'features_2: {features_2}')
-        print(f'feature type is: {type(features_1)}')
-        print(f'filename1: {path_1}')
-        print(f'filename2: {path_2}')
-        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
+        
 
         
         if features_1 is None or features_2 is None: 
@@ -92,7 +86,7 @@ class FeatureWeightOptimizer:
         
         data = db_1
         # Search for the rows corresponding to the image paths
-        print(data.iloc[0])
+       
 
         row_1 = data[data['Filename'] == path_1]
         row_2 = data[data['Filename'] == path_2]
@@ -100,14 +94,7 @@ class FeatureWeightOptimizer:
         # Extract the feature vectors (assuming they are stored as strings)
         features_1 = row_1['Feature']
         features_2 = row_2['Feature']
-        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
-        print(f'features_1: {features_1}')
-        print(f'features_2: {features_2}')
-        print(f'feature type is: {type(features_1)}')
-        print(f'filename1: {path_1}')
-        print(f'filename2: {path_2}')
-        print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
-
+        
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
         # features_2 = [float(x) for x in features_2]
@@ -186,7 +173,8 @@ class FeatureWeightOptimizer:
         # Generate new weights combinations
         for _ in range(100):  # Perform 100 random adjustments
             test_weights = [np.random.rand() for k in weights]
-            
+            print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)
+                        
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
 
@@ -211,7 +199,7 @@ class FeatureWeightOptimizer:
                     # Check if closest image is in the same subdir
                     if self.extract_subfolder(closest_image) == self.extract_subfolder(first_path):
                         accuracy_count += 1
-                                
+            print(f'Accuracy count: {accuracy_count}')
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
                 best_weights = test_weights.copy()       
