@@ -202,7 +202,7 @@ class FeatureWeightOptimizer:
             #new iteration
 
             
-            random_subset = random.sample(image_files, 100)           
+            random_subset = random.sample(image_files, 5)           
             
             print(Fore.GREEN + 'created path sets' + Fore.RESET)
 
