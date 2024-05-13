@@ -188,7 +188,7 @@ class FeatureWeightOptimizer:
                         full_path = os.path.join(subdir, file)
                         image_files.append(full_path)
             random_subset = random.sample(image_files, 100)
-            for first_path in random_subset:
+            for first_path in image_files:
                 closest_image = ""
                 best_score = float('-inf')
                 for other_path in image_files:
