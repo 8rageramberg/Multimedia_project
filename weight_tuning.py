@@ -48,8 +48,8 @@ class FeatureWeightOptimizer:
         row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Features']  # Remove brackets and split into numbers
-        features_2 = row_2['Features']
+        features_1 = row_1['Feature']  # Remove brackets and split into numbers
+        features_2 = row_2['Feature']
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
@@ -77,12 +77,12 @@ class FeatureWeightOptimizer:
         #TODO: compute distance 2 and 3
         data = db_2
         # Search for the rows corresponding to the image paths
-        row_1 = data[data['photo_path'] == path_1]
-        row_2 = data[data['photo_path'] == path_2]
+        row_1 = data[data['Filename'] == path_1]
+        row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['features']  # Remove brackets and split into numbers
-        features_2 = row_2['features']
+        features_1 = row_1['Feature']  # Remove brackets and split into numbers
+        features_2 = row_2['Feature']
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
@@ -113,12 +113,12 @@ class FeatureWeightOptimizer:
         data = db_3
 
         # Search for the rows corresponding to the image paths
-        row_1 = data[data['photo_path'] == path_1]
-        row_2 = data[data['photo_path'] == path_2]
+        row_1 = data[data['Filename'] == path_1]
+        row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['features'] 
-        features_2 = row_2['features']
+        features_1 = row_1['Feature'] 
+        features_2 = row_2['Feature']
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
