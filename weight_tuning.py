@@ -91,6 +91,9 @@ class FeatureWeightOptimizer:
         # Extract the feature vectors (assuming they are stored as strings)
         features_1 = row_1['Feature']  # Remove brackets and split into numbers
         features_2 = row_2['Feature']
+        print(Fore.RED + "This is a red message!" + Fore.RESET)
+        print(f'features_1: {features_1}')
+        print(f'filename: {path_1}')
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
@@ -99,7 +102,7 @@ class FeatureWeightOptimizer:
         # Calculate the SIFT score2
         # Utilizing the cv2 libraries brute force matcher
         brute_force_matcher = cv.BFMatcher()
-        print(Fore.RED + "This is a red message!" + Fore.RESET)
+        
         print("features are" + features_1 + features_2)
         matches = brute_force_matcher.knnMatch(features_1, features_2, 2)
 
