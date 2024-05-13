@@ -44,12 +44,12 @@ class FeatureWeightOptimizer:
         data = db_1
 
         # Search for the rows corresponding to the image paths
-        row_1 = data[data['photo_path'] == path_1]
-        row_2 = data[data['photo_path'] == path_2]
+        row_1 = data[data['Filename'] == path_1]
+        row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['features']  # Remove brackets and split into numbers
-        features_2 = row_2['features']
+        features_1 = row_1['Features']  # Remove brackets and split into numbers
+        features_2 = row_2['Features']
 
         # Convert feature vectors to numeric format
         # features_1 = [float(x) for x in features_1]
