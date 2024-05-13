@@ -13,40 +13,26 @@ warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf"
 test_1 = 'archive/deadlift/deadlift_100031.jpg'
 test_2 = 'archive/lat_pulldown/lat_pulldown_g9.jpg'
 input_path = 'archive/A_test_set/Test_plank/plank_100051_copy.jpg'
-
 test_1 = 'archive/deadlift/deadlift_100031.jpg'
 test_2 = 'archive/lat_pulldown/lat_pulldown_g9.jpg'
-
-
-input_path = "/Users/brageramberg/Desktop/Multimedia_project/archive/brage_test/pushup1_brage.jpeg"
-
-
 best_match_my_photo = "archive/barbell_biceps_curl/barbell_biceps_curl_4300081.jpg"
 
-#best_match_my_photo = 'archive/A_test_set/Test_plank/plank_100051_copy.jpg'
-
-
-
 
 ################################################################################################
 ################################################################################################
 ################################################################################################
+# This class have been altered multiple times to fit different phases in the project. This is the last iteration of testing. This is also independent
+# on other classes, meaning it is looping spesific folders and gets the feature thorugh the pose estimator class directly. This was good for debugging 
+# and working independently
 
-
-
-
-input_path = "/Users/brageramberg/Desktop/Multimedia_project/archive/brage_test/pushup1_brage.jpeg"
-
+input_path = "/Users/brageramberg/Desktop/Multimedia_project/archive/A_test_set/Test_plank/brage_pushup.jpeg"
 estimator = pose_estimator(input_path)
-first = estimator.get_features()
+first = estimator.get_features(display=True)
 
 # Retrieving the directory to use for testing
 directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 directory = os.path.join(directory, "archive")
 directory = os.path.join(directory, "push_up")
-
-count = 2
-my_shit_list_of_shit_numbers = []
 
 best_match = 0
 best_path = ""
@@ -57,8 +43,6 @@ for root, dirs, files in os.walk(directory):
 
     for file_name in files:
         # Create the full path to each file
-
-        
         file_path = os.path.join(root, file_name)
 
         # Comparison:
@@ -72,16 +56,10 @@ for root, dirs, files in os.walk(directory):
         
 print("push up best number and path : ", best_match, "  ", best_path)
 
-
 # Retrieving the directory to use for testing
 directory = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 directory = os.path.join(directory, "archive")
 directory = os.path.join(directory, "barbell_biceps_curl")
-
-
-
-count = 2
-my_shit_list_of_shit_numbers = []
 
 best_match = 0
 best_path = ""
@@ -105,6 +83,4 @@ for root, dirs, files in os.walk(directory):
             best_match = result
             best_path = file_path
         
-
-
 print("push up best number and path : ", best_match, "  ", best_path)
