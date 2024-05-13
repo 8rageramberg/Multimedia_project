@@ -105,8 +105,6 @@ class FeatureWeightOptimizer:
         # Calculate the SIFT score2
         # Utilizing the cv2 libraries brute force matcher
         brute_force_matcher = cv.BFMatcher()
-        print(f'features_1: {features_1}')
-        print(f'features_2: {features_2}')
         matches = brute_force_matcher.knnMatch(features_1, features_2, 2)
 
         # Applying a ratio test (from: https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html)
