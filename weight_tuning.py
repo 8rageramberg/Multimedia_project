@@ -89,11 +89,12 @@ class FeatureWeightOptimizer:
         row_2 = data[data['Filename'] == path_2]
 
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature'].values[0]
-        features_2 = row_2['Feature'].values[0]
+        features_1 = row_1['Feature']
+        features_2 = row_2['Feature']
         print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
         print(f'features_1: {features_1}')
         print(f'features_2: {features_2}')
+        print(f'feature type is: {type(features_1)}')
         print(f'filename1: {path_1}')
         print(f'filename2: {path_2}')
         print(Fore.RED + "bnsjaebjgjsnvjxvjnjn" + Fore.RESET)
