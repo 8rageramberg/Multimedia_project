@@ -36,7 +36,7 @@ class FeatureWeightOptimizer:
    
         
     
-    def calculate_score(self, path_1, path_2, w1, w2, w3):
+    def calculate_score(self, path_1, path_2, w1, w2, w3, db_1, db_2, db_3):
         print(Fore.BLUE + f'Calculating score between {path_1} and {path_2}' + Fore.RESET)
         """
 
@@ -50,7 +50,7 @@ class FeatureWeightOptimizer:
             float: The score between the two images.
         """
         #compute pose estimator score1
-        db_1, db_2, db_3 = self._read_dbs()
+        
 
         data = db_2
 
@@ -173,6 +173,8 @@ class FeatureWeightOptimizer:
         
         sys.path.append("feature_extraction")
 
+        db_1, db_2, db_3 = self._read_dbs()
+
         # Generate new weights combinations
         for _ in range(100):  # Perform 100 random adjustments
             test_weights = [np.random.rand() for k in weights]
@@ -201,7 +203,7 @@ class FeatureWeightOptimizer:
                 best_score = float('-inf')
                 for other_path in image_files:
                     if other_path != first_path:  # Exclude the image itself
-                        score = self.calculate_score(os.path.basename(first_path), os.path.basename(other_path), test_weights[0], test_weights[1], test_weights[2])
+                        score = self.calculate_score(os.path.basename(first_path), os.path.basename(other_path), test_weights[0], test_weights[1], test_weights[2], db_1, db_2, db_3)
                         if score > best_score:
                             best_score = score
                             closest_image = other_path                  
