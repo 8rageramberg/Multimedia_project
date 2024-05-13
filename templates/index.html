@@ -15,9 +15,10 @@
       <div class="card">
         <h1>What exercise am I doing?</h1>
         <p>Version 1.0.0</p>
-        <img src='static/img.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
+        <img src='static/image.jpg' onclick="document.getElementById('input').click();" id="placeHolder">
         <form action="/start_algo" method="GET" onsubmit="startAlgo(event)">
-          <label for="input" , style="display: none;"> Upload image</label>
+          <label for="input" > Upload image</label>
+
           <input type="file" accept="image/jpg image/jpeg" id="input">
           <div id="loading-message"></div>
         </form>
@@ -28,23 +29,23 @@
       <h1>Your exercise looks like:</h1>
       <div class="five_card">
         <div class="img_card">
-          <img src="static/img.jpg" id="Image 1">
+          <img src="static/image.jpg" id="Image 1">
           <p type="scores">Description 1</p>
         </div>
         <div class="img_card">
-          <img src="static/img.jpg" alt="Image 2">
+          <img src="static/image.jpg" alt="Image 2">
           <p type="scores">Description 2</p>
         </div>
         <div class="img_card">
-          <img src="static/img.jpg" alt="Image 3">
+          <img src="static/image.jpg" alt="Image 3">
           <p type="scores">Description 3</p>
         </div>
         <div class="img_card">
-          <img src="static/img.jpg" alt="Image 4">
+          <img src="static/image.jpg" alt="Image 4">
           <p type="scores">Description 4</p>
         </div>
         <div class="img_card">
-          <img src="static/img.jpg" alt="Image 5">
+          <img src="static/image.jpg" alt="Image 5">
           <p type="scores">Description 5</p>
         </div>
       </div>
@@ -52,8 +53,8 @@
 
     <div class="container_3">
       <h2>We think you are doing:</h2>
-      <h1>THIS EXERCISE</h1>
-      <iframe src="https://www.youtube.com/embed/IODxDxX7oi4" allowfullscreen="" frameborder="0" id="video"> </iframe>
+      <h1 id="exercise">THIS EXERCISE</h1>
+      <iframe src="" allowfullscreen="" frameborder="0" id="video"> </iframe>
     </div>
 
 
@@ -71,7 +72,8 @@
 
     imgs.forEach((img, index) => {
       if (data.paths[index]) {
-        let imagePath = `static/img${index}.jpg`; // Construct the image path
+        let identifier = new Date().getTime();
+        let imagePath = `static/img${index}.jpg?${identifier}`; // Construct the image path
         img.src = imagePath; // Update src attribute with the constructed image path
       }
     });
@@ -81,6 +83,16 @@
       }
     });
   };
+
+  function updateTag(data) {
+    exercise = document.getElementById('exercise')
+    exercise.innerText = data.keyword
+  }
+
+  function updateVid(data) {
+    video = document.getElementById('video')
+    video.src = data.video
+  }
 
 
 
@@ -107,8 +119,9 @@
             throw new Error('Error fetching data.');
           }
         }).then(data => {
-          updateImgs(data);
+          updateTag(data)
           updateVid(data)
+          updateImgs(data);
         }).catch(error => {
           console.error('Error:', error);
         });
