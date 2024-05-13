@@ -155,7 +155,7 @@ class FeatureWeightOptimizer:
             accuracy_count = 0 
             
             #iterate over all images, call compare function and accuracy_count += 1 if classified correctly
-            archive_path = os.path.join('..', 'archive')  # Go up one level and then to the archive folder
+            archive_path = os.path.join('..', '..', 'archive')  # Go up one level and then to the archive folder
             for subdir, dirs, files in os.walk(archive_path):
                 for file in files:
                     if file.lower().endswith(('.png', '.jpg', '.jpeg')):  # Check for image files
