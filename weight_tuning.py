@@ -85,6 +85,8 @@ class FeatureWeightOptimizer:
         
         data = db_1
         # Search for the rows corresponding to the image paths
+        print(data.iloc[0])
+
         row_1 = data[data['Filename'] == path_1]
         row_2 = data[data['Filename'] == path_2]
 
