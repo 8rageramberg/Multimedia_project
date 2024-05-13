@@ -143,6 +143,9 @@ class FeatureWeightOptimizer:
         # Calculate the CNN score3        
         distance = np.linalg.norm((features_1 - features_2))
         score3 =  100 - (distance / 5000) * 100
+        print(f'Score 1 type: {type(score1)}')
+        print(f'Score 2 type: {type(score2)}')
+        print(f'Score 3 type: {type(score3)}')
         
 
 
