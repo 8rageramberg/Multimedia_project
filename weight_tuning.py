@@ -194,7 +194,7 @@ class FeatureWeightOptimizer:
                 print(i)
             print(Fore.GREEN + 'created path sets' + Fore.RESET)
 
-            for first_path in random_subset: #wtf
+            for first_path in image_files: #wtf
                 closest_image = ""
                 best_score = float('-inf')
                 for other_path in image_files:
