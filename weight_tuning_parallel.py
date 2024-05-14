@@ -74,6 +74,7 @@ class FeatureWeightOptimizer:
                return os.path.join(root, image)
 
     def _compute_accuracy_count(self, test_weights, image_files, subset_size, db_1, db_2, db_3, file_to_subfolder):
+        print(f'computing accuracy for weights: {test_weights}')
         accuracy_count = 0
         random_subset = random.sample(image_files, subset_size)         
 
