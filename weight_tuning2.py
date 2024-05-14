@@ -24,6 +24,7 @@ class FeatureWeightOptimizer:
     
     
     """
+    @staticmethod
     def normalize_tuple(t):
         """Normalize a tuple by dividing each element by the GCD of the tuple."""
         gcd = math.gcd(t[0], math.gcd(t[1], t[2]))
