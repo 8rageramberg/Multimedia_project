@@ -34,7 +34,7 @@ class FeatureWeightOptimizer:
         return db_1, db_2, db_3
     
 
-    
+        
     
     def calculate_score(self, path_1, path_2, weights, pose_1, sift_1, cnn_1, pose_2, sift_2, cnn_2):
         # Rest of the code...
@@ -58,7 +58,7 @@ class FeatureWeightOptimizer:
         
         if features_1[0] is None or features_2[0] is None: 
             score1 = 0
-        else:       
+        else:        
             # Loop keypoints and do euclidean distance for each row
             euclidean_dist = []
             for kp1, kp2 in zip(features_1[0], features_2[0]):
@@ -67,13 +67,13 @@ class FeatureWeightOptimizer:
             # score on a 1-100 range, and retrieve the mean score
             euclidean_dist_reshape = np.array(euclidean_dist).reshape(-1, 1)
         
-            mean_eculidean = 1 - np.mean(euclidean_dist_reshape)/2.4494897428  
+            mean_eculidean = 1 - np.mean(euclidean_dist_reshape)/2.4494897428   
             mean_similarity_score = 100*(mean_eculidean)
 
             #similarity_scores = 100 - scaled_dist
             score1 = mean_similarity_score 
 
-        # Calculate the SIFT score2    
+        # Calculate the SIFT score2     
 
         # Utilizing the cv2 libraries brute force matcher
         brute_force_matcher = cv.BFMatcher()
@@ -81,7 +81,7 @@ class FeatureWeightOptimizer:
 
         # Applying a ratio test (from: https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html)
         good_matches = []
-        good_match_ratio = 0.75 
+        good_match_ratio = 0.75	
         for neighbor_1, neighbor_2 in matches:
             if (neighbor_1.distance < good_match_ratio * neighbor_2.distance):
                 good_matches.append([neighbor_1])
@@ -94,7 +94,7 @@ class FeatureWeightOptimizer:
         else:
             score2 = (num_good_matches / nr_descriptors) * 100
 
-        # Calculate the CNN score3       
+        # Calculate the CNN score3        
         distance = np.linalg.norm((features_1[2] - features_2[2]))
         score3 =  100 - (distance / 5000) * 100
         # Compute weighted sum of euclidean distances
@@ -111,7 +111,7 @@ class FeatureWeightOptimizer:
     def find_path(self, image):
         for root, _, files in os.walk(os.path.join(os.path.dirname(os.path.abspath(__file__)), "archive")): 
             if image in files:
-                return os.path.join(root, image)
+               return os.path.join(root, image)
         
 
     def optimize_weights(self):
@@ -134,11 +134,11 @@ class FeatureWeightOptimizer:
 
         image_files = []
         archive_path = 'archive'
-        for subdir, dirs, files in os.walk(archive_path):    
+        for subdir, dirs, files in os.walk(archive_path):  
             if 'A_test_set' in dirs:
-                dirs.remove('A_test_set')                     
+                dirs.remove('A_test_set')                    
             if 'Test_plank' in dirs:
-                dirs.remove('Test_plank')        
+                dirs.remove('Test_plank')      
             if 'Test_plank' in dirs:
                 dirs.remove('Test_pullup') 
             if 'tester_imgs' in dirs:
@@ -150,53 +150,46 @@ class FeatureWeightOptimizer:
                         continue
                     image_files.append(full_path)
 
-        # Define the grid search parameters
-        grid_search_values = [0, 0.2, 0.4, 0.6, 0.8, 1]  # Example values, adjust as needed
+        s = {2, 4, 6, 8, 10}
+        assignments = [[x, y, z] for x in s for y in s for z in s]
+        # Generate new weights combinations
+        for test_weights in assignments:  # Perform 100 random adjustments
+            print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)
+                        
+            # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
+            accuracy_count = 0 
+            #new iteration
+            subset_size = 10
+            random_subset = random.sample(image_files, subset_size)         
 
-        # Perform grid search
-        for weight1 in grid_search_values:
-            for weight2 in grid_search_values:
-                for weight3 in grid_search_values:
-                    test_weights = [weight1, weight2, weight3]
-                    print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)
-                    
-                    # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
-                    accuracy_count = 0 
-                    #new iteration
-                    
-                    random_subset = random.sample(image_files, 10)     
+            for first_path in random_subset:
+                closest_image = ""
+                best_score = float('-inf')
 
-                    for first_path in random_subset:
-                        print(f'First path: {first_path}')
-                        closest_image = ""
-                        best_score = float('-inf')
+                #find the feature vectors for the first image
+                pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+                sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+                cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
 
-                        #find the feature vectors for the first image
-                        pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
-                        sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
-                        cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+                for i in db_1.index:
+                    if db_1['Filename'][i] == os.path.basename(first_path):
+                        continue # Skip the image itself
+                    pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i]
+                    score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
+                    if score > best_score:
+                        best_score = score
+                        closest_image = db_1['Filename'][i]
+                if closest_image != "":
+                    # Check if closest image is in the same subdir
+                    if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
+                        accuracy_count += 1
+            print(f'Accuracy count: {accuracy_count} out of {subset_size} images.')
+            if accuracy_count > best_accuracy:
+                best_accuracy = accuracy_count
+                best_weights = test_weights.copy() 
+            print(f'current best weights are: {best_weights}')      
 
-                        for i in db_1.index:
-                            if db_1['Filename'][i] == os.path.basename(first_path):
-                                continue # Skip the image itself
-                            pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i]
-                            score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
-                            if score > best_score:
-                                best_score = score
-                                closest_image = db_1['Filename'][i]
-                        if closest_image != "":
-                            # Check if closest image is in the same subdir
-                            print(f'checking if {self.extract_subfolder(self.find_path(closest_image))} == {self.extract_subfolder(first_path)}')
-                            if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
-                                accuracy_count += 1
-                            print(Fore.LIGHTMAGENTA_EX + f'closes image: {closest_image}' + Fore.RESET)
-                        print(f'Accuracy count: {accuracy_count}')
-                    if accuracy_count > best_accuracy:
-                        best_accuracy = accuracy_count
-                        best_weights = test_weights.copy() 
-                        print(f'current best weights are: {best_weights}')    
-
-        print('best_weights are ' + str(best_weights))      
+        print('best_weights are ' + str(best_weights))        
         return best_weights
     
 if __name__ == "__main__":
