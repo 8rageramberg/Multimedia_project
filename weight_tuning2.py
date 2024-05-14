@@ -28,7 +28,7 @@ class FeatureWeightOptimizer:
     def normalize_tuple(t):
         """Normalize a tuple by dividing each element by the GCD of the tuple."""
         gcd = math.gcd(t[0], math.gcd(t[1], t[2]))
-        return [x // gcd for x in t]
+        return tuple(x // gcd for x in t)
 
     def _read_dbs(self):
         ''' Private function for reading the DB'''
@@ -159,10 +159,11 @@ class FeatureWeightOptimizer:
 
         s = {2, 4, 6, 8, 10}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
+
         # Generate new weights combinations
         for test_weights in assignments:  # Perform 100 random adjustments
-            print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)
-                        
+            test_weights = list(test_weights)
+            print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)                        
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
             #new iteration
