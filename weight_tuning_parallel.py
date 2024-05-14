@@ -129,7 +129,7 @@ class FeatureWeightOptimizer:
                     image_files.append(full_path)
                     file_to_subfolder[os.path.basename(full_path)] = self.extract_subfolder(full_path)
 
-        s = {2, 4, 6, 8, 10}
+        s = {0, 1, 2, 3}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
                 
