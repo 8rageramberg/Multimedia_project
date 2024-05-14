@@ -175,7 +175,7 @@ class FeatureWeightOptimizer:
                 for i in db_1.index:
                     if db_1['Filename'][i] == os.path.basename(first_path):
                         continue # Skip the image itself
-                    pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i], db_1['Filename'][i]
+                    pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i]
                     score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
                     if score > best_score:
                         best_score = score
