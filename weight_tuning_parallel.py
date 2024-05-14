@@ -26,6 +26,8 @@ class FeatureWeightOptimizer:
     def normalize_tuple(t):
         """Normalize a tuple by dividing each element by the GCD of the tuple."""
         gcd = math.gcd(t[0], math.gcd(t[1], t[2]))
+        if gcd == 0:
+            return t
         return tuple(x // gcd for x in t)
 
     def _read_dbs(self):

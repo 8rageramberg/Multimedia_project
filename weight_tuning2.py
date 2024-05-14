@@ -26,6 +26,8 @@ class FeatureWeightOptimizer:
     def normalize_tuple(t):
         """Normalize a tuple by dividing each element by the GCD of the tuple."""
         gcd = math.gcd(t[0], math.gcd(t[1], t[2]))
+        if gcd == 0:
+            return t
         return tuple(x // gcd for x in t)
 
     def _read_dbs(self):
@@ -112,7 +114,7 @@ class FeatureWeightOptimizer:
                     image_files.append(full_path)
                     file_to_subfolder[os.path.basename(full_path)] = self.extract_subfolder(full_path)
 
-        s = {2, 4, 6, 8, 10}
+        s = {0,1,2,3}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
         # Generate new weights combinations
@@ -128,7 +130,6 @@ class FeatureWeightOptimizer:
             for first_path in random_subset:
                 closest_image = ""
                 best_score = float('-inf')
-
                 pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
                 sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
                 cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
