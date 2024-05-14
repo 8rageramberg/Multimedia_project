@@ -10,55 +10,55 @@ An innovative and technological way of detecting your exercise, without the need
 You need the following dependencies to run our application:
 
 *OpenCV*
-> -  *OpenCV:* a realtime computer vision library:<p></p>
+> -  *OpenCV:* a realtime computer vision library.<p></p>
 	- Pip install: `pip install opencv-python`
 
 &nbsp;
 
-  *MediaPipe*
->-  *MediaPipe:* Google's open source framework for building ML pipeline
+*MediaPipe*
+>-  *MediaPipe:* Google's open source framework for building ML pipeline.<p></p>
 		- Pip install: `pip install --upgrade mediapipe`
 
 &nbsp;
 
   *NumPy*
->-  *NumPy:* A package for scientific computing in python. Used mostly for the np.ndarray datastructure.
+>-  *NumPy:* A package for scientific computing in python. Used mostly for the np.ndarray datastructure.<p></p>
 		- Pip install: `pip install --upgrade numpy`
 
 &nbsp;
 
 *Scipy*
-> -  *Scipy:* Python library for mathematical computations and operations ( e.g. euclidean distance)
+> -  *Scipy:* Python library for mathematical computations and operations ( e.g. euclidean distance).<p></p>
 	-Pip install: `pip install --upgrade scipy`
 
 &nbsp;
 
 *Flask*
-> -  *Flask:* Python library for simple web app development and
+> -  *Flask:* Python library for simple web app development.<p></p>
 	- Pip install: `pip install --upgrade flask`
 
 &nbsp;
 
 *Keras*
-> -  *Keras:* A open-source deep learning library utilized for the CNN
+> -  *Keras:* A open-source deep learning library utilized for the CNN.<p></p>
 	- Pip install: `pip install --upgrade keras`
 
 &nbsp;
 
 *Sklearn*
-> -  *Sklearn:* Sci-kit learns own library for machine learning.
+> -  *Sklearn:* Sci-kit learns own library for machine learning.<p></p>
 	- Pip install: `pip install --upgrade sklearn`
 
 &nbsp;
 
 *Tensorflow*
-> -  *Tensorflow:* Tensorflows own library for machine learning.
+> -  *Tensorflow:* Tensorflows own library for machine learning.<p></p>
 	- Pip install: `pip install --upgrade tensorflow`
 
 &nbsp;
 
 *Pandas*
-> -  *Pandas:* Pandas is a tool for data manipulation, such as making dataframes and saving pickle files.
+> -  *Pandas:* Pandas is a tool for data manipulation, such as making dataframes and saving pickle files.<p></p>
 	- Pip install: `pip install --upgrade pandas`
 &nbsp;
 
