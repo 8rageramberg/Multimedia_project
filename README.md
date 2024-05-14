@@ -68,7 +68,7 @@ You need the following dependencies to run our application:
 To actually be able to run the application you need the pickle files associated with each feature extractor. These files contain the features of each and every image in our database, stored as a pickle file for fast and convenient retrieval when running the program.
 
 These can be downloaded from [here](https://unisydneyedu-my.sharepoint.com/:f:/g/personal/thus0518_uni_sydney_edu_au/EkcsZbO2zZhAi57Mvj_Z-9YBKax0SaSjgek4x6M04-BWtQ?e=L2eJcV).
-You need to put these three files into the folder feature_db.
+You need to put these three files into the folder feature_db.<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *NB: Link expires on the 13th of may 2025!*
 
 &nbsp;
