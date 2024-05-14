@@ -143,6 +143,10 @@ class FeatureWeightOptimizer:
 
         db_1, db_2, db_3 = self._read_dbs()
 
+        print("Number of rows in db_1:", len(db_1))
+        print("Number of rows in db_2:", len(db_2))
+        print("Number of rows in db_3:", len(db_3))
+
         image_files = []
         archive_path = 'archive'
         for subdir, dirs, files in os.walk(archive_path):  
