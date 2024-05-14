@@ -105,7 +105,7 @@ class FeatureWeightOptimizer:
     def extract_subfolder(self, path):
         parts = path.split('/')  # Split the path into segments
         if len(parts) > 1:
-            return parts[-1]  # Return the second segment, which is the exercise subfolder
+            return parts[-2]  # Return the second segment, which is the exercise subfolder
         return None
     
     def find_path(self, image):
