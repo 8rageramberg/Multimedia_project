@@ -222,7 +222,7 @@ class FeatureWeightOptimizer:
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
                 best_weights = test_weights.copy() 
-                print(f'current best weights are: {best_weights}')      
+            print(f'current best weights are: {best_weights}')      
 
         print('best_weights are ' + str(best_weights))        
         return best_weights
