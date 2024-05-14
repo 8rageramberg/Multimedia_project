@@ -157,7 +157,7 @@ class FeatureWeightOptimizer:
                     image_files.append(full_path)
 
         s = {2, 4, 6, 8, 10}
-        assignments = {self.normalize_tuple([x, y, z]) for x in s for y in s for z in s}
+        assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
         print(assignments)
         # Generate new weights combinations
         for test_weights in assignments:  # Perform 100 random adjustments
