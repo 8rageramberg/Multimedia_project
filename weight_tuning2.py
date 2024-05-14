@@ -186,6 +186,7 @@ class FeatureWeightOptimizer:
                                 closest_image = db_1['Filename'][i]
                         if closest_image != "":
                             # Check if closest image is in the same subdir
+                            print(f'checking if {self.extract_subfolder(self.find_path(closest_image))} == {self.extract_subfolder(first_path)}')
                             if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
                                 accuracy_count += 1
                             print(Fore.LIGHTMAGENTA_EX + f'closes image: {closest_image}' + Fore.RESET)
