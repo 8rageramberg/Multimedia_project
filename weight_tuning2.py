@@ -93,6 +93,7 @@ class FeatureWeightOptimizer:
         db_1, db_2, db_3 = self._read_dbs()
 
         image_files = []
+        file_to_subfolder = {}
         archive_path = 'archive'
         for subdir, dirs, files in os.walk(archive_path):  
             if 'A_test_set' in dirs:
@@ -109,16 +110,17 @@ class FeatureWeightOptimizer:
                     if "DS_Store" in full_path:
                         continue
                     image_files.append(full_path)
+                    file_to_subfolder[os.path.basename(full_path)] = self.extract_subfolder(full_path)
 
         s = {2, 4, 6, 8, 10}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
-        random_subset = random.sample(image_files, subset_size) #test subset
         # Generate new weights combinations
         for test_weights in assignments:
             test_weights = list(test_weights)
             print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)                        
-            accuracy_count = 0                     
+            accuracy_count = 0 
+            random_subset = random.sample(image_files, subset_size)         
 
             for first_path in random_subset:
                 closest_image = ""
@@ -137,7 +139,7 @@ class FeatureWeightOptimizer:
                         best_score = score
                         closest_image = db_1['Filename'][i]
                 if closest_image != "":
-                    if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
+                    if file_to_subfolder[closest_image] == file_to_subfolder[os.path.basename(first_path)]:
                         accuracy_count += 1
             print(f'Accuracy count: {accuracy_count} out of {subset_size} images.')
             if accuracy_count > best_accuracy:
