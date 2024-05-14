@@ -37,9 +37,19 @@ class FeatureWeightOptimizer:
         
     
     def calculate_score(self, path_1, path_2, weights, pose_1, sift_1, cnn_1, pose_2, sift_2, cnn_2):
-        """
+        print("Arguments of calculate_score:")
+        print("path_1:", path_1)
+        print("path_2:", path_2)
+        print("weights:", weights)
+        print("pose_1:", pose_1)
+        print("sift_1:", sift_1)
+        print("cnn_1:", cnn_1)
+        print("pose_2:", pose_2)
+        print("sift_2:", sift_2)
+        print("cnn_2:", cnn_2)
+        # Rest of the code...
 
-        Calculate the score between two images.
+        """
 
         Args:
             full_path (str): The path to the first image.
