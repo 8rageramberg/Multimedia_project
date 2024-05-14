@@ -11,7 +11,6 @@ You need the following dependencies to run our application:
 
 *OpenCV*
 > -  *OpenCV:* a realtime computer vision library:
-	- Conda install: `conda install -c conda-forge opencv`
 	- Pip install: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  `pip install opencv-python`
 
 &nbsp;
@@ -19,6 +18,12 @@ You need the following dependencies to run our application:
   *MediaPipe*
 >-  *MediaPipe:* Google's open source framework for building ML pipeline
 		- Pip install: `pip install --upgrade mediapipe`
+
+&nbsp;
+
+  *NumPy*
+>-  *NumPy:* A package for scientific computing in python. Used mostly for the np.ndarray datastructure.
+		- Pip install: `pip install --upgrade numpy`
 
 &nbsp;
 
