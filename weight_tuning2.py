@@ -6,7 +6,7 @@ import numpy as np
 import sys
 import os
 import random
-
+import time
 import mediapipe as mp
 import cv2 as cv
 from sklearn.preprocessing import MinMaxScaler
@@ -116,7 +116,10 @@ class FeatureWeightOptimizer:
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
         # Generate new weights combinations
+        start = time.time()
         for test_weights in assignments:
+            print(f'last iteration took {time.time() - start} seconds')
+            start = time.time()
             test_weights = list(test_weights)
             print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)                        
             accuracy_count = 0 
@@ -139,7 +142,7 @@ class FeatureWeightOptimizer:
                         best_score = score
                         closest_image = db_1['Filename'][i]
                 if closest_image != "":
-                    if file_to_subfolder[closest_image] == file_to_subfolder[os.path.basename(first_path)]:
+                    if file_to_subfolder[closest_image] == self.extract_subfolder(first_path):
                         accuracy_count += 1
             print(f'Accuracy count: {accuracy_count} out of {subset_size} images.')
             if accuracy_count > best_accuracy:
