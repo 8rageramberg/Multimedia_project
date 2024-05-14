@@ -66,8 +66,8 @@ class FeatureWeightOptimizer:
         features_2 = [pose_2, sift_2, cnn_2]    
 
         
-        if features_1 is None or features_2 is None: 
-            return 0
+        if features_1[0] is None or features_2[0] is None: 
+            score1 = 0
         
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
@@ -142,10 +142,6 @@ class FeatureWeightOptimizer:
         sys.path.append("feature_extraction")
 
         db_1, db_2, db_3 = self._read_dbs()
-
-        print("Number of rows in db_1:", len(db_1))
-        print("Number of rows in db_2:", len(db_2))
-        print("Number of rows in db_3:", len(db_3))
 
         image_files = []
         archive_path = 'archive'
