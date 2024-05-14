@@ -158,8 +158,8 @@ class FeatureWeightOptimizer:
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
             #new iteration
-                        
-            random_subset = random.sample(image_files, 50)         
+            subset_size = 10
+            random_subset = random.sample(image_files, subset_size)         
 
             for first_path in random_subset:
                 closest_image = ""
@@ -182,7 +182,7 @@ class FeatureWeightOptimizer:
                     # Check if closest image is in the same subdir
                     if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
                         accuracy_count += 1
-            print(f'Accuracy count: {accuracy_count}')
+            print(f'Accuracy count: {accuracy_count} out of {subset_size} images.')
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
                 best_weights = test_weights.copy() 
