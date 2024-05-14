@@ -95,6 +95,7 @@ class FeatureWeightOptimizer:
             if closest_image != "":
                 if file_to_subfolder[closest_image] == self.extract_subfolder(first_path):
                     accuracy_count += 1
+        print(f'weights: {test_weights}, accuracy: {accuracy_count}')
         return tuple(test_weights), accuracy_count
 
     def optimize_weights(self, subset_size):
