@@ -36,7 +36,7 @@ class FeatureWeightOptimizer:
 
         
     
-    def calculate_score(self, path_1, path_2, w1, w2, w3, db_1, db_2, db_3):
+    def calculate_score(self, path_1, path_2, weights, pose_1, sift_1, cnn_1, pose_2, sift_2, cnn_2):
         """
 
         Calculate the score between two images.
@@ -51,20 +51,9 @@ class FeatureWeightOptimizer:
         #compute pose estimator score1
         
 
-        data = db_2
-
-        # Search for the rows corresponding to the image paths
-        row_1 = data[data['Filename'] == path_1]
-        row_2 = data[data['Filename'] == path_2]
-
         # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature'].iloc[0]  
-        features_2 = row_2['Feature'].iloc[0]
-
-        # Convert feature vectors to numeric format
-        # features_1 = [float(x) for x in features_1]
-        # features_2 = [float(x) for x in features_2]
-        
+        features_1 = [pose_1, sift_1, cnn_1] 
+        features_2 = [pose_2, sift_2, cnn_2]    
 
         
         if features_1 is None or features_2 is None: 
@@ -72,7 +61,7 @@ class FeatureWeightOptimizer:
         
         # Loop keypoints and do euclidean distance for each row
         euclidean_dist = []
-        for kp1, kp2 in zip(features_1, features_2):
+        for kp1, kp2 in zip(features_1[0], features_2[0]):
             euclidean_dist.append(euclidean(kp1, kp2))
 
         # Flip so lower distances is higher similarity, then scale the similarity
@@ -85,26 +74,11 @@ class FeatureWeightOptimizer:
         #similarity_scores = 100 - scaled_dist
         score1 = mean_similarity_score 
 
-        
-        data = db_1
-        # Search for the rows corresponding to the image paths
-       
+        # Calculate the SIFT score2     
 
-        row_1 = data[data['Filename'] == path_1]
-        row_2 = data[data['Filename'] == path_2]
-
-        # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature'].iloc[0]
-        features_2 = row_2['Feature'].iloc[0]
-        
-        # Convert feature vectors to numeric format
-        # features_1 = [float(x) for x in features_1]
-        # features_2 = [float(x) for x in features_2]
-
-        # Calculate the SIFT score2
         # Utilizing the cv2 libraries brute force matcher
         brute_force_matcher = cv.BFMatcher()
-        matches = brute_force_matcher.knnMatch(features_1, features_2, 2)
+        matches = brute_force_matcher.knnMatch(features_1[1], features_2[1], 2)
 
         # Applying a ratio test (from: https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html)
         good_matches = []
@@ -121,30 +95,11 @@ class FeatureWeightOptimizer:
         else:
             score2 = (num_good_matches / nr_descriptors) * 100
 
-
-
-        data = db_3
-
-        # Search for the rows corresponding to the image paths
-        row_1 = data[data['Filename'] == path_1]
-        row_2 = data[data['Filename'] == path_2]
-
-        # Extract the feature vectors (assuming they are stored as strings)
-        features_1 = row_1['Feature'].iloc[0]
-        features_2 = row_2['Feature'].iloc[0]
-
-        # Convert feature vectors to numeric format
-        # features_1 = [float(x) for x in features_1]
-        # features_2 = [float(x) for x in features_2]
-
         # Calculate the CNN score3        
-        distance = np.linalg.norm((features_1 - features_2))
+        distance = np.linalg.norm((features_1[2] - features_2[2]))
         score3 =  100 - (distance / 5000) * 100
-        
-
-
         # Compute weighted sum of euclidean distances
-        weighted_score = w1 * score1 + w2 * score2 + w3 * score3
+        weighted_score = weights[0] * score1 + weights[1] * score2 + weights[2] * score3
 
         return weighted_score
     
@@ -153,6 +108,11 @@ class FeatureWeightOptimizer:
         if len(parts) > 1:
             return parts[-1]  # Return the second segment, which is the exercise subfolder
         return None
+    
+    def find_path(self, image):
+        for root, _, files in os.walk(os.path.join(os.path.dirname(os.path.abspath(__file__)), "archive")): 
+            if image in files:
+               return os.path.join(root, image)
         
 
     def optimize_weights(self):
@@ -198,25 +158,31 @@ class FeatureWeightOptimizer:
                         
             # for this weight assignment, count the number of images classified correctly, i.e. is the closest image in the same exercise folder?
             accuracy_count = 0 
-
             #new iteration
-
-            
-            random_subset = random.sample(image_files, 30)          
+                        
+            random_subset = random.sample(image_files, 50)         
 
             for first_path in random_subset:
                 print(f'First path: {first_path}')
                 closest_image = ""
                 best_score = float('-inf')
-                for other_path in image_files:
-                    if other_path != first_path:  # Exclude the image itself
-                        score = self.calculate_score(os.path.basename(first_path), os.path.basename(other_path), test_weights[0], test_weights[1], test_weights[2], db_1, db_2, db_3)
-                        if score > best_score:
-                            best_score = score
-                            closest_image = other_path                  
+
+                #find the feature vectors for the first image
+                pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+                sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+                cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+
+                for i in db_1.index:
+                    if db_1['Filename'][i] == os.path.basename(first_path):
+                        continue # Skip the image itself
+                    pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i], db_1['Filename'][i]
+                    score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
+                    if score > best_score:
+                        best_score = score
+                        closest_image = db_1['Filename'][i]
                 if closest_image != "":
                     # Check if closest image is in the same subdir
-                    if self.extract_subfolder(closest_image) == self.extract_subfolder(first_path):
+                    if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
                         accuracy_count += 1
             print(f'Accuracy count: {accuracy_count}')
             if accuracy_count > best_accuracy:
