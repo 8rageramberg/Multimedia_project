@@ -113,12 +113,12 @@ class FeatureWeightOptimizer:
         s = {2, 4, 6, 8, 10}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
+        random_subset = random.sample(image_files, subset_size) #test subset
         # Generate new weights combinations
         for test_weights in assignments:
             test_weights = list(test_weights)
             print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)                        
-            accuracy_count = 0 
-            random_subset = random.sample(image_files, subset_size)         
+            accuracy_count = 0                     
 
             for first_path in random_subset:
                 closest_image = ""
