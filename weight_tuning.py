@@ -68,21 +68,20 @@ class FeatureWeightOptimizer:
         
         if features_1[0] is None or features_2[0] is None: 
             score1 = 0
+        else:        
+            # Loop keypoints and do euclidean distance for each row
+            euclidean_dist = []
+            for kp1, kp2 in zip(features_1[0], features_2[0]):
+                euclidean_dist.append(euclidean(kp1, kp2))
+            # Flip so lower distances is higher similarity, then scale the similarity
+            # score on a 1-100 range, and retrieve the mean score
+            euclidean_dist_reshape = np.array(euclidean_dist).reshape(-1, 1)
         
-        # Loop keypoints and do euclidean distance for each row
-        euclidean_dist = []
-        for kp1, kp2 in zip(features_1[0], features_2[0]):
-            euclidean_dist.append(euclidean(kp1, kp2))
+            mean_eculidean = 1 - np.mean(euclidean_dist_reshape)/2.4494897428   
+            mean_similarity_score = 100*(mean_eculidean)
 
-        # Flip so lower distances is higher similarity, then scale the similarity
-        # score on a 1-100 range, and retrieve the mean score
-        euclidean_dist_reshape = np.array(euclidean_dist).reshape(-1, 1)
-       
-        mean_eculidean = 1 - np.mean(euclidean_dist_reshape)/2.4494897428   
-        mean_similarity_score = 100*(mean_eculidean)
-
-        #similarity_scores = 100 - scaled_dist
-        score1 = mean_similarity_score 
+            #similarity_scores = 100 - scaled_dist
+            score1 = mean_similarity_score 
 
         # Calculate the SIFT score2     
 
