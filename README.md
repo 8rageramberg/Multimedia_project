@@ -10,8 +10,8 @@ An innovative and technological way of detecting your exercise, without the need
 You need the following dependencies to run our application:
 
 *OpenCV*
-> -  *OpenCV:* a realtime computer vision library:
-	- Pip install: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  `pip install opencv-python`
+> -  *OpenCV:* a realtime computer vision library:<p></p>
+	- Pip install: `pip install opencv-python`
 
 &nbsp;
 
@@ -29,37 +29,37 @@ You need the following dependencies to run our application:
 
 *Scipy*
 > -  *Scipy:* Python library for mathematical computations and operations ( e.g. euclidean distance)
-	-Pip install: `pip install --upgrade scipy``
+	-Pip install: `pip install --upgrade scipy`
 
 &nbsp;
 
-  *Flask*
+*Flask*
 > -  *Flask:* Python library for simple web app development and
 	- Pip install: `pip install --upgrade flask`
 
 &nbsp;
 
-  *Keras*
+*Keras*
 > -  *Keras:* A open-source deep learning library utilized for the CNN
-	- Pip install: ` pip install --upgrade keras`
+	- Pip install: `pip install --upgrade keras`
 
 &nbsp;
 
-  *Sklearn*
+*Sklearn*
 > -  *Sklearn:* Sci-kit learns own library for machine learning.
-	- Pip install: ` pip install --upgrade sklearn`
+	- Pip install: `pip install --upgrade sklearn`
 
 &nbsp;
 
-  *Tensorflow*
+*Tensorflow*
 > -  *Tensorflow:* Tensorflows own library for machine learning.
-	- Pip install: ` pip install --upgrade tensorflow`
+	- Pip install: `pip install --upgrade tensorflow`
 
 &nbsp;
 
-  *Pandas*
+*Pandas*
 > -  *Pandas:* Pandas is a tool for data manipulation, such as making dataframes and saving pickle files.
-	- Pip install: ` pip install --upgrade pandas`
+	- Pip install: `pip install --upgrade pandas`
 &nbsp;
 
 &nbsp;
