@@ -154,3 +154,8 @@ iframe {
     width: 400px;
     border-radius: 50px;
 }
+body.no-cursor-change {
+    cursor: wait !important; /* Override cursor style for body */
+}
+
+

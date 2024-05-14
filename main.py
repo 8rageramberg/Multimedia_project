@@ -12,10 +12,10 @@ from reverse_img_searcher_pickle import reverse_img_searcher_pickle as rev_searc
 
 
 # Uncomment to disable SSL verification. Should not be needed 
-# import ssl
-# import requests                                          
-# requests.packages.urllib3.disable_warnings()
-# ssl._create_default_https_context = ssl._create_unverified_context
+import ssl
+import requests                                          
+requests.packages.urllib3.disable_warnings()
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 ##### HELPER FUNCS: #####
@@ -31,7 +31,7 @@ def append_static_files(result, directory):
             if filename in files:
                filenames.append(os.path.join(root, filename))
 
-    for comparison, name in zip(result[:,0], filenames):
+    for comparison, name in zip(reversed(result[:, 0]), reversed(filenames)):       # This need to be reversed because we want the best matches first. 
         values.append(comparison)
         paths.append(name)
         static_filename = f"img{len(paths)-1}.jpg"
@@ -97,6 +97,7 @@ def find_match():
         for file in files:
              if file.startswith('uploaded_img'):
                 path = os.path.join(directory, file)
+                
                 rev = rev_search(path, sift_w=0, pose_w=0.6, cnn_w=1)
                 result = rev.search()                   # Start algo on the user input image
     else:
