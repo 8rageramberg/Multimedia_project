@@ -164,7 +164,7 @@ class FeatureWeightOptimizer:
                     accuracy_count = 0 
                     #new iteration
                     
-                    random_subset = random.sample(image_files, 100)     
+                    random_subset = random.sample(image_files, 10)     
 
                     for first_path in random_subset:
                         print(f'First path: {first_path}')
