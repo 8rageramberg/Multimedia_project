@@ -162,7 +162,6 @@ class FeatureWeightOptimizer:
             random_subset = random.sample(image_files, 50)         
 
             for first_path in random_subset:
-                print(f'First path: {first_path}')
                 closest_image = ""
                 best_score = float('-inf')
 
@@ -181,11 +180,8 @@ class FeatureWeightOptimizer:
                         closest_image = db_1['Filename'][i]
                 if closest_image != "":
                     # Check if closest image is in the same subdir
-                    print(f'checking if {self.extract_subfolder(self.find_path(closest_image))} == {self.extract_subfolder(first_path)}')
                     if self.extract_subfolder(self.find_path(closest_image)) == self.extract_subfolder(first_path):
                         accuracy_count += 1
-                        print('score ++')
-                print(Fore.LIGHTMAGENTA_EX + f'closest image: {closest_image}' + Fore.RESET)
             print(f'Accuracy count: {accuracy_count}')
             if accuracy_count > best_accuracy:
                 best_accuracy = accuracy_count
