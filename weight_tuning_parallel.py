@@ -1,19 +1,27 @@
-import os
-import sys
-import random
-import math
-from multiprocessing import Pool, cpu_count
-
+import concurrent.futures
+import tensorflow as tf
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input
 import numpy as np
-import pandas as pd
+import sys
+import os
+import random
+import time
+import mediapipe as mp
 import cv2 as cv
+from sklearn.preprocessing import MinMaxScaler
 from scipy.spatial.distance import euclidean
+import pandas as pd
+import colorama
 from colorama import Fore
+import math
+
+sys.path.append("feature_db")
 
 class FeatureWeightOptimizer:
-    """
-    A class to optimize the weights of different features extracted by the feature_extractor.
-    """
+    # ... (other methods remain unchanged)
+
     @staticmethod
     def normalize_tuple(t):
         """Normalize a tuple by dividing each element by the GCD of the tuple."""
@@ -64,39 +72,32 @@ class FeatureWeightOptimizer:
         for root, _, files in os.walk(os.path.join(os.path.dirname(os.path.abspath(__file__)), "archive")): 
             if image in files:
                return os.path.join(root, image)
-        
-    def _calculate_accuracy(self, args):
-        first_path, random_subset, db_1, db_2, db_3, test_weights, file_to_subfolder = args
 
-        pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
-        sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
-        cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+    def _compute_accuracy_count(self, test_weights, image_files, subset_size, db_1, db_2, db_3, file_to_subfolder):
+        accuracy_count = 0
+        random_subset = random.sample(image_files, subset_size)         
 
-        closest_image = ""
-        best_score = float('-inf')
+        for first_path in random_subset:
+            closest_image = ""
+            best_score = float('-inf')
+            pose_feature1 = db_2[db_2['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+            sift_feature1 = db_1[db_1['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
+            cnn_feature1 = db_3[db_3['Filename'] == os.path.basename(first_path)]['Feature'].iloc[0]
 
-        for i in db_1.index:
-            if db_1['Filename'][i] == os.path.basename(first_path):
-                continue
-            pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i]
-            score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
-            if score > best_score:
-                best_score = score
-                closest_image = db_1['Filename'][i]
-        if closest_image != "" and file_to_subfolder[closest_image] == file_to_subfolder[os.path.basename(first_path)]:
-            return 1
-        return 0
+            for i in db_1.index:
+                if db_1['Filename'][i] == os.path.basename(first_path):
+                    continue
+                pose_feature2, sift_feature2, cnn_feature3 = db_2['Feature'][i], db_1['Feature'][i], db_3['Feature'][i]
+                score = self.calculate_score(os.path.basename(first_path), db_1['Filename'][i], test_weights, pose_feature1, sift_feature1, cnn_feature1, pose_feature2, sift_feature2, cnn_feature3)
+                if score > best_score:
+                    best_score = score
+                    closest_image = db_1['Filename'][i]
+            if closest_image != "":
+                if file_to_subfolder[closest_image] == self.extract_subfolder(first_path):
+                    accuracy_count += 1
+        return tuple(test_weights), accuracy_count
 
     def optimize_weights(self, subset_size):
-        """
-        Optimizes the weights of each feature extractor to maximize classification accuracy.
-
-        Args:
-            subset_size (int): Number of images to include in the subset.
-
-        Returns:
-            dict: Optimized weights for each feature extractor.
-        """
         list_of_extractors = ["pose_estimator", "SIFT_descriptor_detector", "CNN"]
         weights = [1, 1, 1]    
         best_accuracy = 0
@@ -114,7 +115,7 @@ class FeatureWeightOptimizer:
                 dirs.remove('A_test_set')                    
             if 'Test_plank' in dirs:
                 dirs.remove('Test_plank')      
-            if 'Test_plank' in dirs:
+            if 'Test_pullup' in dirs:
                 dirs.remove('Test_pullup') 
             if 'tester_imgs' in dirs:
                 dirs.remove('tester_imgs')                     
@@ -129,29 +130,19 @@ class FeatureWeightOptimizer:
         s = {2, 4, 6, 8, 10}
         assignments = {self.normalize_tuple((x, y, z)) for x in s for y in s for z in s}
 
-        pool = Pool(cpu_count())
+                
+        # Use ThreadPoolExecutor to run the weight assignment computations in parallel
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_to_weights = {executor.submit(self._compute_accuracy_count, list(weights), image_files, subset_size, db_1, db_2, db_3, file_to_subfolder): weights for weights in assignments}
+            for future in concurrent.futures.as_completed(future_to_weights):
+                test_weights, accuracy_count = future.result()
+                if accuracy_count > best_accuracy:
+                    best_accuracy = accuracy_count
+                    best_weights = list(test_weights)
 
-        # Generate new weights combinations
-        for test_weights in assignments:
-            test_weights = list(test_weights)
-            print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)                        
-            random_subset = random.sample(image_files, subset_size)         
-
-            args = [(first_path, random_subset, db_1, db_2, db_3, test_weights, file_to_subfolder) for first_path in random_subset]
-            accuracy_count = sum(pool.map(self._calculate_accuracy, args))
-
-            print(f'Accuracy count: {accuracy_count} out of {subset_size} images.')
-            if accuracy_count > best_accuracy:
-                best_accuracy = accuracy_count
-                best_weights = test_weights.copy() 
-            print(f'current best weights are: {best_weights}')      
-
-        pool.close()
-        pool.join()
-
-        print('best_weights are ' + str(best_weights))        
+        print('best_weights are ' + str(best_weights))
         return best_weights
-    
+
 if __name__ == "__main__":
     optimizer = FeatureWeightOptimizer()
     
