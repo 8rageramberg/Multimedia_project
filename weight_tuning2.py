@@ -158,6 +158,7 @@ class FeatureWeightOptimizer:
 
         s = {2, 4, 6, 8, 10}
         assignments = {self.normalize_tuple([x, y, z]) for x in s for y in s for z in s}
+        print(assignments)
         # Generate new weights combinations
         for test_weights in assignments:  # Perform 100 random adjustments
             print(Fore.RED + f'Testing weights: {test_weights}' + Fore.RESET)
